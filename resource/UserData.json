@@ -1,0 +1,23 @@
+{
+	"firstName": "Lilcoln",
+	"lastName" : "Burrows",
+	"emailAddress": "lincolnburrows",
+	"new_emailAddress": "deek",
+	"password" : "123456",
+	"day" : "20",
+	"month" : "January",
+	"year" : "1996",
+	"country" : "Viet Nam",
+	"city"	  : "Ho Chi Minh",
+	"new_city"	  : "Ha Noi",
+	"address" : "321 Le Lai",
+	"new_address" : "256 Hai Ba Trung",
+	"zipcode" : "700000",
+	"new_zipcode" : "118000",
+	"phone"  : "0987546234",		
+	"new_phone"  : "0987546324",		
+	"login" : {
+		"username" : "Lilcoln",	
+		"password" : "123456"
+	}
+}
