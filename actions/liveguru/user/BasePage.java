@@ -346,9 +346,9 @@ public class BasePage {
 	}
 
 	public boolean isElementUndisplayed(WebDriver driver, String locatorType) {
-		overrideImplicitTimeout(driver, Duration.ofSeconds(30));
+		overrideImplicitTimeout(driver, Duration.ofSeconds(5));
 		List<WebElement> elements = getListWebElement(driver, locatorType);
-		overrideImplicitTimeout(driver, Duration.ofSeconds(30));
+		overrideImplicitTimeout(driver, Duration.ofSeconds(5));
 		if (elements.size() == 0) {
 			return true;
 		} else if (elements.size() > 0 && !elements.get(0).isDisplayed()) {
@@ -613,6 +613,19 @@ public class BasePage {
 		}
 	}
 
+	public BasePage openProductsPage(WebDriver driver, String productsPage) {
+		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, productsPage);
+		clickToElement(driver, BasePageUI.PRODUCT_PAGE, productsPage);
+		switch (productsPage) {
+		case "Mobile":
+			return PageGeneratorManager.getPageGeneratorManager().getMobilePage(driver);
+		case "TV":
+			return PageGeneratorManager.getPageGeneratorManager().getTVPage(driver);
+		default:
+			throw new RuntimeException("Invalid page Links at Header are.");
+		}
+	}
+
 	public void inputToBoxText(WebDriver driver, String idValue, String textValue) {
 		waitForElementVisible(driver, BasePageUI.BOX_TEXT, idValue);
 		sendkeyToElement(driver, BasePageUI.BOX_TEXT, textValue, idValue);
@@ -624,9 +637,22 @@ public class BasePage {
 		switch (title) {
 		case "Register":
 			return PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
+		case "Login":
+			return PageGeneratorManager.getPageGeneratorManager().getMyAccountPage(driver);
 		default:
 			throw new RuntimeException("Invalid page Links at Header are.");
 		}
+	}
+
+	public BasePage openProductsPageByText(WebDriver driver, String textValue) {
+		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		clickToElement(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		return PageGeneratorManager.getPageGeneratorManager().getProductsPage(driver);
+	}
+
+	public boolean isTextHeaderDasboardDisplayed(WebDriver driver, String valueClass) {
+		waitForElementVisible(driver, BasePageUI.HEADER_DASBOARD_TEXT, valueClass);
+		return isElementDisplayed(driver, BasePageUI.HEADER_DASBOARD_TEXT, valueClass);
 	}
 
 	public Object getProductSize(WebDriver driver) {

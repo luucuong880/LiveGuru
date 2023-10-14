@@ -5,10 +5,13 @@ import org.openqa.selenium.WebDriver;
 import pageObject.user.CheckoutPageObject;
 import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
+import pageObject.user.MobilePageObject;
 import pageObject.user.MyAccountPO;
 import pageObject.user.MyCartPageObject;
 import pageObject.user.MyWishlistPO;
+import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
+import pageObject.user.TVPageObject;
 
 public class PageGeneratorManager {
 
@@ -42,6 +45,18 @@ public class PageGeneratorManager {
 
 	public LoginPageObject getLoginPage(WebDriver driver) {
 		return new LoginPageObject(driver);
+	}
+
+	public MobilePageObject getMobilePage(WebDriver driver) {
+		return new MobilePageObject(driver);
+	}
+
+	public TVPageObject getTVPage(WebDriver driver) {
+		return new TVPageObject(driver);
+	}
+
+	public ProductsPageObject getProductsPage(WebDriver driver) {
+		return new ProductsPageObject(driver);
 	}
 
 }

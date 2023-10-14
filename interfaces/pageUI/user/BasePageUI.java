@@ -7,4 +7,6 @@ public class BasePageUI {
 	public static final String HEADER_LINKS = "xpath=//div[@id='header-account']//a[text()='%s']";
 	public static final String BOX_TEXT = "xpath=//input[@id='%s']";
 	public static final String TITLE_DYNAMIC = "xpath=//button[@title='%s']";
+	public static final String HEADER_DASBOARD_TEXT = "xpath=//div[@class='%s']";
+	public static final String PRODUCT_PAGE = "xpath=//a[text()='%s']";
 }

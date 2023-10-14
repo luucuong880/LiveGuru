@@ -15,7 +15,10 @@ import com.livguru.data.UserDataMapper;
 import liveguru.user.BaseTest;
 import liveguru.user.PageGeneratorManager;
 import pageObject.user.HomePageObject;
+import pageObject.user.LoginPageObject;
+import pageObject.user.MobilePageObject;
 import pageObject.user.MyAccountPO;
+import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
 import utilities.Environment;
 
@@ -35,7 +38,16 @@ public class FrontEnd extends BaseTest {
 		homePage = PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
 		userData = UserDataMapper.getUserData();
 		emailAddress = userData.getEmailAddress() + generateFakeNumber() + "@fakemail.com";
+		fullName = userData.getFirstName() + " " + userData.getLastName();
 
+		String productsItem = "";
+		if (productsItem.contains("Xperia")) {
+			verifyEquals(mobilePage.getCostOfProducts(productsItem), "$100.00");
+		} else if (productsItem.contains("Samsung Galaxy")) {
+			verifyEquals(mobilePage.getCostOfProducts(productsItem), "$130.00");
+		} else if (productsItem.contains("IPhone")) {
+			verifyEquals(mobilePage.getCostOfProducts(productsItem), "$500.00");
+		}
 	}
 
 	@Test
@@ -81,7 +93,37 @@ public class FrontEnd extends BaseTest {
 
 	@Test
 	public void User_03_Veify_User_Information() {
+		log.info("User Step - 10: Log out Account");
+		myAccountPage.clickToIconAtWrapper(driver, "Account");
+		homePage = (HomePageObject) myAccountPage.openPageAtHeaderLinks(driver, "Log Out");
+		homePage.sleepInSecond(5);
+		verifyFalse(homePage.isMessageTextUndisplayed());
 
+		log.info("User Step - 11: Open Login page and Login Account");
+		homePage.clickToIconAtWrapper(driver, "Account");
+		loginPage = (LoginPageObject) homePage.openPageAtHeaderLinks(driver, "Log In");
+		loginPage.inputToBoxText(driver, "email", emailAddress);
+		loginPage.inputToBoxText(driver, "pass", userData.getPassword());
+		myAccountPage = (MyAccountPO) loginPage.clickToButtonByTitleDynamic(driver, "Login");
+
+		log.info("User Step - 12: Verify message is displayed");
+		verifyTrue(myAccountPage.isTextHeaderDasboardDisplayed(driver, "page-title"));
+		verifyEquals(myAccountPage.getTextHeaderDasboard(), "Hello, " + fullName + "!");
+	}
+
+	@Test
+	public void User_04_Veify_Cost_Of_Product() {
+		log.info("User Step - 13: Open Mobile page");
+		mobilePage = (MobilePageObject) myAccountPage.openProductsPage(driver, "Mobile");
+
+		log.info("User Step - 14: Get cost of Sony Xperia");
+		verifyEquals(mobilePage.getCostOfProducts("Xperia"), "$100.00");
+
+		log.info("User Step - 15: Click on Sony Xperia detail");
+		productsPage = (ProductsPageObject) mobilePage.openProductsPageByText(driver, "Sony Xperia");
+
+		log.info("User Step - 16: Get cost of Sony Xperia");
+		verifyEquals(productsPage.getCostOfProducts(), "$100.00");
 	}
 
 	public int generateFakeNumber() {
@@ -98,9 +140,12 @@ public class FrontEnd extends BaseTest {
 	}
 
 	WebDriver driver;
-	String emailAddress;
+	String emailAddress, fullName;
 	private HomePageObject homePage;
 	private MyAccountPO myAccountPage;
 	private RegisterPageObject registerPage;
+	private LoginPageObject loginPage;
+	private MobilePageObject mobilePage;
+	private ProductsPageObject productsPage;
 	UserDataMapper userData;
 }

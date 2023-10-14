@@ -22,4 +22,9 @@ public class MyAccountPO extends BasePage {
 		return getElementAttribute(driver, MyAccountPageUI.BOX_TEXT, attributeName, boxText);
 	}
 
+	public String getTextHeaderDasboard() {
+		waitForElementVisible(driver, MyAccountPageUI.HEADER_TEXT);
+		return getElementText(driver, MyAccountPageUI.HEADER_TEXT);
+	}
+
 }
