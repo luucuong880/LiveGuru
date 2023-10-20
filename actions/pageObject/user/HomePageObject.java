@@ -12,11 +12,6 @@ public class HomePageObject extends BasePage {
 		this.driver = driver;
 	}
 
-	public String getSuccessMessageText() {
-		waitForElementVisible(driver, HomePageUI.MESSAGE_TEXT);
-		return getElementText(driver, HomePageUI.MESSAGE_TEXT);
-	}
-
 	public boolean isMessageTextUndisplayed() {
 		return isElementDisplayed(driver, HomePageUI.TEXT_UNDEISPLAYED);
 	}

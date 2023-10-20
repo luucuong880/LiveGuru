@@ -20,6 +20,7 @@ import pageObject.user.MobilePageObject;
 import pageObject.user.MyAccountPO;
 import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
+import pageObject.user.ShoppingCartPageObject;
 import utilities.Environment;
 
 public class FrontEnd extends BaseTest {
@@ -39,6 +40,7 @@ public class FrontEnd extends BaseTest {
 		userData = UserDataMapper.getUserData();
 		emailAddress = userData.getEmailAddress() + generateFakeNumber() + "@fakemail.com";
 		fullName = userData.getFirstName() + " " + userData.getLastName();
+		couponCode = "GURU50";
 
 		String productsItem = "";
 		if (productsItem.contains("Xperia")) {
@@ -72,7 +74,7 @@ public class FrontEnd extends BaseTest {
 		homePage = (HomePageObject) registerPage.clickToButtonByTitleDynamic(driver, "Register");
 
 		log.info("User Step - 06: Verify Success message text after registered");
-		verifyEquals(homePage.getSuccessMessageText(), "Thank you for registering with Main Website Store.");
+		verifyEquals(homePage.getTextMessages(driver), "Thank you for registering with Main Website Store.");
 	}
 
 	@Test
@@ -124,6 +126,43 @@ public class FrontEnd extends BaseTest {
 
 		log.info("User Step - 16: Get cost of Sony Xperia");
 		verifyEquals(productsPage.getCostOfProducts(), "$100.00");
+
+	}
+
+	@Test
+	public void User_05_Veify_Discount_Coupon() {
+		log.info("User Step - 17: Click to Add Cart button");
+		shoppingCartPage = productsPage.clickToAddToCartButton();
+		verifyEquals(shoppingCartPage.getTextMessages(driver), "Sony Xperia was added to your shopping cart.");
+
+		log.info("User Step - 18: Enter Coupon code");
+		shoppingCartPage.inputToBoxText(driver, "coupon_code", couponCode);
+		shoppingCartPage.clickToButtonByTitleDynamic("Apply");
+		verifyEquals(shoppingCartPage.getTextMessages(driver), "Coupon code \"GURU50\" was applied.");
+
+		log.info("User Step - 19: Verify the discount generated");
+		verifyTrue(shoppingCartPage.isTextDisplayed("Discount (GURU50)", "-$5.00"));
+		verifyTrue(shoppingCartPage.isGrandTotalTextDisplayed());
+	}
+
+	@Test
+	public void User_06_Veify_Can_Not_Add_More_500_Items_Of_Product() {
+		log.info("User Step - 20: Enter text qty 501");
+		shoppingCartPage.inputToFieldQTY("501");
+
+		log.info("User Step - 21: Click Update button");
+		shoppingCartPage.clickToButtonByTitleDynamic("Update");
+
+		log.info("User Step - 22: Verify Error message");
+		verifyEquals(shoppingCartPage.getTextMessages(driver), "Some of the products cannot be ordered in requested quantity.");
+		verifyEquals(shoppingCartPage.getItemErrorMessage(), "* The maximum quantity allowed for purchase is 500.");
+
+		log.info("User Step - 23: Click to Empty Cart button");
+		shoppingCartPage.clickToButtonByTitleDynamic("Empty Cart");
+
+		log.info("User Step - 24: Verify Shopping Cart is empty");
+		verifyEquals(shoppingCartPage.getEmptyCartText(), "You have no items in your shopping cart." + "\n" + "Click here to continue shopping.");
+
 	}
 
 	public int generateFakeNumber() {
@@ -140,12 +179,13 @@ public class FrontEnd extends BaseTest {
 	}
 
 	WebDriver driver;
-	String emailAddress, fullName;
+	String emailAddress, fullName, couponCode;
 	private HomePageObject homePage;
 	private MyAccountPO myAccountPage;
 	private RegisterPageObject registerPage;
 	private LoginPageObject loginPage;
 	private MobilePageObject mobilePage;
 	private ProductsPageObject productsPage;
+	private ShoppingCartPageObject shoppingCartPage;
 	UserDataMapper userData;
 }

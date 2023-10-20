@@ -655,6 +655,11 @@ public class BasePage {
 		return isElementDisplayed(driver, BasePageUI.HEADER_DASBOARD_TEXT, valueClass);
 	}
 
+	public String getTextMessages(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.MESSAGE_SUCCESS_TEXT);
+		return getElementText(driver, BasePageUI.MESSAGE_SUCCESS_TEXT);
+	}
+
 	public Object getProductSize(WebDriver driver) {
 		waitForElementVisible(driver, BasePageUI.PRODUCT_SIZE);
 		return getElementSize(driver, BasePageUI.PRODUCT_SIZE);

@@ -2,7 +2,8 @@ package liveguru.user;
 
 import org.openqa.selenium.WebDriver;
 
-import pageObject.user.CheckoutPageObject;
+import pageObject.user.ShoppingCartPageObject;
+import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
 import pageObject.user.MobilePageObject;
@@ -39,8 +40,8 @@ public class PageGeneratorManager {
 		return new MyWishlistPO(driver);
 	}
 
-	public CheckoutPageObject getCheckoutPage(WebDriver driver) {
-		return new CheckoutPageObject(driver);
+	public ShoppingCartPageObject getCheckoutPage(WebDriver driver) {
+		return new ShoppingCartPageObject(driver);
 	}
 
 	public LoginPageObject getLoginPage(WebDriver driver) {
@@ -57,6 +58,10 @@ public class PageGeneratorManager {
 
 	public ProductsPageObject getProductsPage(WebDriver driver) {
 		return new ProductsPageObject(driver);
+	}
+
+	public ComparePageObject getComparePage(WebDriver driver) {
+		return new ComparePageObject(driver);
 	}
 
 }

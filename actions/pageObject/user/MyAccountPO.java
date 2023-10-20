@@ -3,6 +3,7 @@ package pageObject.user;
 import org.openqa.selenium.WebDriver;
 
 import liveguru.user.BasePage;
+import liveguru.user.PageGeneratorManager;
 import pageUI.user.MyAccountPageUI;
 
 public class MyAccountPO extends BasePage {
@@ -25,6 +26,12 @@ public class MyAccountPO extends BasePage {
 	public String getTextHeaderDasboard() {
 		waitForElementVisible(driver, MyAccountPageUI.HEADER_TEXT);
 		return getElementText(driver, MyAccountPageUI.HEADER_TEXT);
+	}
+
+	public ComparePageObject openComparePage() {
+		waitForElementVisible(driver, MyAccountPageUI.COMPARE_LINK_PAGE);
+		switchToFrameIframe(driver, MyAccountPageUI.COMPARE_LINK_PAGE);
+		return PageGeneratorManager.getPageGeneratorManager().getComparePage(driver);
 	}
 
 }
