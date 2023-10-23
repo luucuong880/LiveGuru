@@ -14,13 +14,16 @@ import com.livguru.data.UserDataMapper;
 
 import liveguru.user.BaseTest;
 import liveguru.user.PageGeneratorManager;
+import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
 import pageObject.user.MobilePageObject;
 import pageObject.user.MyAccountPO;
+import pageObject.user.MyWishlistPO;
 import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
 import pageObject.user.ShoppingCartPageObject;
+import pageObject.user.TVPageObject;
 import utilities.Environment;
 
 public class FrontEnd extends BaseTest {
@@ -39,6 +42,7 @@ public class FrontEnd extends BaseTest {
 		homePage = PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
 		userData = UserDataMapper.getUserData();
 		emailAddress = userData.getEmailAddress() + generateFakeNumber() + "@fakemail.com";
+		shareEmail = userData.getEmailAddress() + +generateFakeNumber() + "@sharemail.com";
 		fullName = userData.getFirstName() + " " + userData.getLastName();
 		couponCode = "GURU50";
 
@@ -78,7 +82,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	@Test
-	public void User_02_Veify_User_Information() {
+	public void User_02_User_Information() {
 		log.info("User Step - 07: Open 'My Account' page");
 		homePage.clickToIconAtWrapper(driver, "Account");
 		myAccountPage = (MyAccountPO) homePage.openPageAtHeaderLinks(driver, "My Account");
@@ -94,7 +98,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	@Test
-	public void User_03_Veify_User_Information() {
+	public void User_03_Login_To_System() {
 		log.info("User Step - 10: Log out Account");
 		myAccountPage.clickToIconAtWrapper(driver, "Account");
 		homePage = (HomePageObject) myAccountPage.openPageAtHeaderLinks(driver, "Log Out");
@@ -114,7 +118,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	@Test
-	public void User_04_Veify_Cost_Of_Product() {
+	public void User_04_Cost_Of_Product() {
 		log.info("User Step - 13: Open Mobile page");
 		mobilePage = (MobilePageObject) myAccountPage.openProductsPage(driver, "Mobile");
 
@@ -130,7 +134,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	@Test
-	public void User_05_Veify_Discount_Coupon() {
+	public void User_05_Discount_Coupon() {
 		log.info("User Step - 17: Click to Add Cart button");
 		shoppingCartPage = productsPage.clickToAddToCartButton();
 		verifyEquals(shoppingCartPage.getTextMessages(driver), "Sony Xperia was added to your shopping cart.");
@@ -146,7 +150,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	@Test
-	public void User_06_Veify_Can_Not_Add_More_500_Items_Of_Product() {
+	public void User_06_Can_Not_Add_More_500_Items_Of_Product() {
 		log.info("User Step - 20: Enter text qty 501");
 		shoppingCartPage.inputToFieldQTY("501");
 
@@ -165,6 +169,51 @@ public class FrontEnd extends BaseTest {
 
 	}
 
+	@Test
+	public void User_07_Compare_Two_Product() {
+		log.info("User Step - 25: Open Mobile page");
+		mobilePage = (MobilePageObject) shoppingCartPage.openProductsPage(driver, "Mobile");
+
+		log.info("User Step - 26: Add 2 product to Compare list");
+		mobilePage = mobilePage.clickAddLinks("IPhone", "link-compare");
+		verifyEquals(mobilePage.getTextMessages(driver), "The product IPhone has been added to comparison list.");
+
+		mobilePage = mobilePage.clickAddLinks("Sony Xperia", "link-compare");
+		verifyEquals(mobilePage.getTextMessages(driver), "The product Sony Xperia has been added to comparison list.");
+
+		log.info("User Step - 27: Click to Compare button");
+		comparePage = mobilePage.clickToCompareButton();
+
+		log.info("User Step - 28: Verify 2 selected products are present in Compare page");
+		verifyTrue(comparePage.isProductsDisplayed("IPhone"));
+		verifyTrue(comparePage.isProductsDisplayed("Sony Xperia"));
+
+		log.info("User Step - 29: Close window Compare page");
+		comparePage.clickToCloseWindowButton();
+	}
+
+	@Test
+	public void User_08_Share_Wishlist_To_Other_People_Using_Email() {
+		log.info("User Step - 30: Open TV page");
+		tvPage = (TVPageObject) comparePage.openProductsPage(driver, "TV");
+
+		log.info("User Step - 31: Click to Add wish list 'LG LCD' product");
+		myWishlistPage = tvPage.clickToAddWishListButton("LG LCD", "link-wishlist");
+		verifyEquals(myWishlistPage.getTextMessages(driver), "LG LCD has been added to your wishlist. Click here to continue shopping.");
+
+		log.info("User Step - 32: Click to Share Wishlist button");
+		myWishlistPage.clickToButtonTitle(driver, "Share Wishlist");
+
+		log.info("User Step - 33: Enter Email and message then click Share Wishlist button");
+		myWishlistPage.inputToTextAreaBox("email_address", shareEmail);
+		myWishlistPage.inputToTextAreaBox("message", "Share for you");
+		myWishlistPage.clickToButtonTitle(driver, "Share Wishlist");
+		verifyEquals(myWishlistPage.getTextMessages(driver), "Your Wishlist has been shared.");
+
+		log.info("User Step - 34: Verify 1 item Displayed");
+		verifyTrue(myWishlistPage.isProductDiplayed());
+	}
+
 	public int generateFakeNumber() {
 		Random rand = new Random();
 		return rand.nextInt(99999);
@@ -179,7 +228,7 @@ public class FrontEnd extends BaseTest {
 	}
 
 	WebDriver driver;
-	String emailAddress, fullName, couponCode;
+	String emailAddress, fullName, couponCode, shareEmail;
 	private HomePageObject homePage;
 	private MyAccountPO myAccountPage;
 	private RegisterPageObject registerPage;
@@ -187,5 +236,8 @@ public class FrontEnd extends BaseTest {
 	private MobilePageObject mobilePage;
 	private ProductsPageObject productsPage;
 	private ShoppingCartPageObject shoppingCartPage;
+	private ComparePageObject comparePage;
+	private TVPageObject tvPage;
+	private MyWishlistPO myWishlistPage;
 	UserDataMapper userData;
 }

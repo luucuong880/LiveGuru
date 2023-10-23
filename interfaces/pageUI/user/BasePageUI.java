@@ -9,5 +9,5 @@ public class BasePageUI {
 	public static final String TITLE_DYNAMIC = "xpath=//button[@title='%s']";
 	public static final String HEADER_DASBOARD_TEXT = "xpath=//div[@class='%s']";
 	public static final String PRODUCT_PAGE = "xpath=//a[text()='%s']";
-	public static final String MESSAGE_SUCCESS_TEXT = "xpath=//ul[@class='messages']";
+	public static final String TEXT_MESSAGE = "xpath=//ul[@class='messages']";
 }

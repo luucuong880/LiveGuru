@@ -16,4 +16,15 @@ public class ComparePageObject extends BasePage {
 		waitForElementVisible(driver, ComparePageUI.PRODUCT_COST, idValue);
 		return getElementText(driver, ComparePageUI.PRODUCT_COST, idValue);
 	}
+
+	public boolean isProductsDisplayed(String textValue) {
+		waitForElementVisible(driver, ComparePageUI.PRODUCTS_TEXT, textValue);
+		return isElementDisplayed(driver, ComparePageUI.PRODUCTS_TEXT, textValue);
+	}
+
+	public void clickToCloseWindowButton() {
+		waitForElementClickable(driver, ComparePageUI.CLOSE_WINDOW_BUTTON);
+		clickToElement(driver, ComparePageUI.CLOSE_WINDOW_BUTTON);
+		switchToWindowByTitle(driver, "Mobile");
+	}
 }

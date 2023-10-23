@@ -644,6 +644,11 @@ public class BasePage {
 		}
 	}
 
+	public void clickToButtonTitle(WebDriver driver, String title) {
+		waitForElementClickable(driver, BasePageUI.TITLE_DYNAMIC, title);
+		clickToElement(driver, BasePageUI.TITLE_DYNAMIC, title);
+	}
+
 	public BasePage openProductsPageByText(WebDriver driver, String textValue) {
 		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, textValue);
 		clickToElement(driver, BasePageUI.PRODUCT_PAGE, textValue);
@@ -656,8 +661,8 @@ public class BasePage {
 	}
 
 	public String getTextMessages(WebDriver driver) {
-		waitForElementVisible(driver, BasePageUI.MESSAGE_SUCCESS_TEXT);
-		return getElementText(driver, BasePageUI.MESSAGE_SUCCESS_TEXT);
+		waitForElementVisible(driver, BasePageUI.TEXT_MESSAGE);
+		return getElementText(driver, BasePageUI.TEXT_MESSAGE);
 	}
 
 	public Object getProductSize(WebDriver driver) {
