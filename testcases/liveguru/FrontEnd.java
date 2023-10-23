@@ -214,6 +214,11 @@ public class FrontEnd extends BaseTest {
 		verifyTrue(myWishlistPage.isProductDiplayed());
 	}
 
+	@Test
+	public void User_09_Add_Your_Review() {
+
+	}
+
 	public int generateFakeNumber() {
 		Random rand = new Random();
 		return rand.nextInt(99999);
