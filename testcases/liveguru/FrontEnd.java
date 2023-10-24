@@ -24,6 +24,7 @@ import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
 import pageObject.user.ShoppingCartPageObject;
 import pageObject.user.TVPageObject;
+import pageObject.user.YourReviewPageObject;
 import utilities.Environment;
 
 public class FrontEnd extends BaseTest {
@@ -212,11 +213,45 @@ public class FrontEnd extends BaseTest {
 
 		log.info("User Step - 34: Verify 1 item Displayed");
 		verifyTrue(myWishlistPage.isProductDiplayed());
+		myWishlistPage.clickToIconAtWrapper(driver, "Account");
+		homePage = (HomePageObject) myWishlistPage.openPageAtHeaderLinks(driver, "Log Out");
+		homePage.sleepInSecond(5);
+		verifyFalse(homePage.isMessageTextUndisplayed());
 	}
 
 	@Test
 	public void User_09_Add_Your_Review() {
+		log.info("User Step - 35: Open TV products page");
+		tvPage = (TVPageObject) homePage.openProductsPage(driver, "TV");
 
+		log.info("User Step - 36: Click 'SAMSUNG LCD' product detail");
+		productsPage = tvPage.clickProductsDetail("Samsung LCD");
+
+		log.info("User Step - 37: Click 'Add Your Review' link");
+		yourReviewPage = (YourReviewPageObject) productsPage.clickToAddToLinksButton(driver, "Add Your Review");
+
+		log.info("User Step - 38: Enter empty fields and click 'Submit Review' button");
+		yourReviewPage.inputToTextArea("review_field", " ");
+		yourReviewPage.inputToBoxText(driver, "summary_field", " ");
+		yourReviewPage.inputToBoxText(driver, "nickname_field", " ");
+		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
+
+		log.info("User Step - 39: Verify Error message text");
+		verifyEquals(yourReviewPage.getErrorMessage("advice-validate-rating-validate_rating"), "Please select one of each of the ratings above");
+		verifyEquals(yourReviewPage.getErrorMessage("advice-required-entry-review_field"), "THIS IS A REQUIRED FIELD.");
+		verifyEquals(yourReviewPage.getErrorMessage("advice-required-entry-summary_field"), "THIS IS A REQUIRED FIELD.");
+		verifyEquals(yourReviewPage.getErrorMessage("advice-required-entry-nickname_field"), "THIS IS A REQUIRED FIELD.");
+		yourReviewPage.refreshCurrentPage(driver);
+
+		log.info("User Step - 40: Enter valid data to fields");
+		yourReviewPage.checkToRateProducts("Quality 1_4");
+		yourReviewPage.inputToTextArea("review_field", "This product is goood,Can be used for a long time");
+		yourReviewPage.inputToBoxText(driver, "summary_field", "Good");
+		yourReviewPage.inputToBoxText(driver, "nickname_field", "Ghost");
+		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
+
+		log.info("User Steo - 41: Verify Success Submit Review message text");
+		verifyEquals(yourReviewPage.getTextMessages(driver), "Your review has been accepted for moderation.");
 	}
 
 	public int generateFakeNumber() {
@@ -244,5 +279,6 @@ public class FrontEnd extends BaseTest {
 	private ComparePageObject comparePage;
 	private TVPageObject tvPage;
 	private MyWishlistPO myWishlistPage;
+	private YourReviewPageObject yourReviewPage;
 	UserDataMapper userData;
 }

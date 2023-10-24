@@ -644,6 +644,21 @@ public class BasePage {
 		}
 	}
 
+	public BasePage clickToAddToLinksButton(WebDriver driver, String textValue) {
+		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		clickToElement(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		switch (textValue) {
+		case "Add to Wishlist":
+			return PageGeneratorManager.getPageGeneratorManager().getMyWishlistPage(driver);
+		case "Add to Compare":
+			return PageGeneratorManager.getPageGeneratorManager().getComparePage(driver);
+		case "Add Your Review":
+			return PageGeneratorManager.getPageGeneratorManager().getYourReviewePage(driver);
+		default:
+			throw new RuntimeException("Wrong links button!");
+		}
+	}
+
 	public void clickToButtonTitle(WebDriver driver, String title) {
 		waitForElementClickable(driver, BasePageUI.TITLE_DYNAMIC, title);
 		clickToElement(driver, BasePageUI.TITLE_DYNAMIC, title);

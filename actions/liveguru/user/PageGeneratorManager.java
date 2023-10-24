@@ -2,7 +2,6 @@ package liveguru.user;
 
 import org.openqa.selenium.WebDriver;
 
-import pageObject.user.ShoppingCartPageObject;
 import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
@@ -12,7 +11,9 @@ import pageObject.user.MyCartPageObject;
 import pageObject.user.MyWishlistPO;
 import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
+import pageObject.user.ShoppingCartPageObject;
 import pageObject.user.TVPageObject;
+import pageObject.user.YourReviewPageObject;
 
 public class PageGeneratorManager {
 
@@ -62,6 +63,10 @@ public class PageGeneratorManager {
 
 	public ComparePageObject getComparePage(WebDriver driver) {
 		return new ComparePageObject(driver);
+	}
+
+	public YourReviewPageObject getYourReviewePage(WebDriver driver) {
+		return new YourReviewPageObject(driver);
 	}
 
 }

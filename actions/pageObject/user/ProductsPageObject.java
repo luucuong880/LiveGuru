@@ -18,11 +18,6 @@ public class ProductsPageObject extends BasePage {
 		return getElementText(driver, ProductsPageUI.PRICE_OF_PRODUCTS);
 	}
 
-	public void clickToAddToLinksButton(String textValue) {
-		waitForElementClickable(driver, ProductsPageUI.LINKS_ADD, textValue);
-		clickToElement(driver, ProductsPageUI.LINKS_ADD, textValue);
-	}
-
 	public String getSuccessText() {
 		waitForElementVisible(driver, ProductsPageUI.SUCCESS_MESSAGE);
 		return getElementText(driver, ProductsPageUI.SUCCESS_MESSAGE);

@@ -18,4 +18,10 @@ public class TVPageObject extends BasePage {
 		clickToElement(driver, TVPageUI.ADD_LINKS, textValue, classValue);
 		return PageGeneratorManager.getPageGeneratorManager().getMyWishlistPage(driver);
 	}
+
+	public ProductsPageObject clickProductsDetail(String text) {
+		waitForElementClickable(driver, TVPageUI.PRODUCTS_DETAIL, text);
+		clickToElement(driver, TVPageUI.PRODUCTS_DETAIL, text);
+		return PageGeneratorManager.getPageGeneratorManager().getProductsPage(driver);
+	}
 }
