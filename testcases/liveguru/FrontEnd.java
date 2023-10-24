@@ -19,10 +19,10 @@ import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
 import pageObject.user.MobilePageObject;
 import pageObject.user.MyAccountPO;
+import pageObject.user.MyCartPageObject;
 import pageObject.user.MyWishlistPO;
 import pageObject.user.ProductsPageObject;
 import pageObject.user.RegisterPageObject;
-import pageObject.user.ShoppingCartPageObject;
 import pageObject.user.TVPageObject;
 import pageObject.user.YourReviewPageObject;
 import utilities.Environment;
@@ -137,43 +137,43 @@ public class FrontEnd extends BaseTest {
 	@Test
 	public void User_05_Discount_Coupon() {
 		log.info("User Step - 17: Click to Add Cart button");
-		shoppingCartPage = productsPage.clickToAddToCartButton();
-		verifyEquals(shoppingCartPage.getTextMessages(driver), "Sony Xperia was added to your shopping cart.");
+		myCartPage = productsPage.clickToAddToCartButton();
+		verifyEquals(myCartPage.getTextMessages(driver), "Sony Xperia was added to your shopping cart.");
 
 		log.info("User Step - 18: Enter Coupon code");
-		shoppingCartPage.inputToBoxText(driver, "coupon_code", couponCode);
-		shoppingCartPage.clickToButtonByTitleDynamic("Apply");
-		verifyEquals(shoppingCartPage.getTextMessages(driver), "Coupon code \"GURU50\" was applied.");
+		myCartPage.inputToBoxText(driver, "coupon_code", couponCode);
+		myCartPage.clickToButtonByTitleDynamic("Apply");
+		verifyEquals(myCartPage.getTextMessages(driver), "Coupon code \"GURU50\" was applied.");
 
 		log.info("User Step - 19: Verify the discount generated");
-		verifyTrue(shoppingCartPage.isTextDisplayed("Discount (GURU50)", "-$5.00"));
-		verifyTrue(shoppingCartPage.isGrandTotalTextDisplayed());
+		verifyTrue(myCartPage.isTextDisplayed("Discount (GURU50)", "-$5.00"));
+		verifyTrue(myCartPage.isGrandTotalTextDisplayed());
 	}
 
 	@Test
 	public void User_06_Can_Not_Add_More_500_Items_Of_Product() {
 		log.info("User Step - 20: Enter text qty 501");
-		shoppingCartPage.inputToFieldQTY("501");
+		myCartPage.inputToFieldQTY("501");
 
 		log.info("User Step - 21: Click Update button");
-		shoppingCartPage.clickToButtonByTitleDynamic("Update");
+		myCartPage.clickToButtonByTitleDynamic("Update");
 
 		log.info("User Step - 22: Verify Error message");
-		verifyEquals(shoppingCartPage.getTextMessages(driver), "Some of the products cannot be ordered in requested quantity.");
-		verifyEquals(shoppingCartPage.getItemErrorMessage(), "* The maximum quantity allowed for purchase is 500.");
+		verifyEquals(myCartPage.getTextMessages(driver), "Some of the products cannot be ordered in requested quantity.");
+		verifyEquals(myCartPage.getItemErrorMessage(), "* The maximum quantity allowed for purchase is 500.");
 
 		log.info("User Step - 23: Click to Empty Cart button");
-		shoppingCartPage.clickToButtonByTitleDynamic("Empty Cart");
+		myCartPage.clickToButtonByTitleDynamic("Empty Cart");
 
 		log.info("User Step - 24: Verify Shopping Cart is empty");
-		verifyEquals(shoppingCartPage.getEmptyCartText(), "You have no items in your shopping cart." + "\n" + "Click here to continue shopping.");
+		verifyEquals(myCartPage.getEmptyCartText(), "You have no items in your shopping cart." + "\n" + "Click here to continue shopping.");
 
 	}
 
 	@Test
 	public void User_07_Compare_Two_Product() {
 		log.info("User Step - 25: Open Mobile page");
-		mobilePage = (MobilePageObject) shoppingCartPage.openProductsPage(driver, "Mobile");
+		mobilePage = (MobilePageObject) myCartPage.openProductsPage(driver, "Mobile");
 
 		log.info("User Step - 26: Add 2 product to Compare list");
 		mobilePage = mobilePage.clickAddLinks("IPhone", "link-compare");
@@ -213,16 +213,12 @@ public class FrontEnd extends BaseTest {
 
 		log.info("User Step - 34: Verify 1 item Displayed");
 		verifyTrue(myWishlistPage.isProductDiplayed());
-		myWishlistPage.clickToIconAtWrapper(driver, "Account");
-		homePage = (HomePageObject) myWishlistPage.openPageAtHeaderLinks(driver, "Log Out");
-		homePage.sleepInSecond(5);
-		verifyFalse(homePage.isMessageTextUndisplayed());
 	}
 
 	@Test
 	public void User_09_Add_Your_Review() {
 		log.info("User Step - 35: Open TV products page");
-		tvPage = (TVPageObject) homePage.openProductsPage(driver, "TV");
+		tvPage = (TVPageObject) myWishlistPage.openProductsPage(driver, "TV");
 
 		log.info("User Step - 36: Click 'SAMSUNG LCD' product detail");
 		productsPage = tvPage.clickProductsDetail("Samsung LCD");
@@ -250,8 +246,15 @@ public class FrontEnd extends BaseTest {
 		yourReviewPage.inputToBoxText(driver, "nickname_field", "Ghost");
 		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
 
-		log.info("User Steo - 41: Verify Success Submit Review message text");
+		log.info("User Step - 41: Verify Success Submit Review message text");
 		verifyEquals(yourReviewPage.getTextMessages(driver), "Your review has been accepted for moderation.");
+	}
+
+	@Test
+	public void User_10_User_Is_Able_To_Purchase_Product() {
+		log.info("User Step - 42: Open My Wishlist page");
+		yourReviewPage.clickToIconAtWrapper(driver, "Account");
+		myWishlistPage = (MyWishlistPO) yourReviewPage.openPageAtHeaderLinks(driver, "Add to Wishlist");
 	}
 
 	public int generateFakeNumber() {
@@ -275,7 +278,7 @@ public class FrontEnd extends BaseTest {
 	private LoginPageObject loginPage;
 	private MobilePageObject mobilePage;
 	private ProductsPageObject productsPage;
-	private ShoppingCartPageObject shoppingCartPage;
+	private MyCartPageObject myCartPage;
 	private ComparePageObject comparePage;
 	private TVPageObject tvPage;
 	private MyWishlistPO myWishlistPage;

@@ -23,9 +23,9 @@ public class ProductsPageObject extends BasePage {
 		return getElementText(driver, ProductsPageUI.SUCCESS_MESSAGE);
 	}
 
-	public ShoppingCartPageObject clickToAddToCartButton() {
+	public MyCartPageObject clickToAddToCartButton() {
 		waitForElementClickable(driver, ProductsPageUI.ADD_TO_CART_BUTTON);
 		clickToElement(driver, ProductsPageUI.ADD_TO_CART_BUTTON);
-		return PageGeneratorManager.getPageGeneratorManager().getCheckoutPage(driver);
+		return PageGeneratorManager.getPageGeneratorManager().getMyCartPage(driver);
 	}
 }
