@@ -641,6 +641,10 @@ public class BasePage {
 			return PageGeneratorManager.getPageGeneratorManager().getMyAccountPage(driver);
 		case "Add to Cart":
 			return PageGeneratorManager.getPageGeneratorManager().getMyCartPage(driver);
+		case "Proceed to Checkout":
+			return PageGeneratorManager.getPageGeneratorManager().getCheckoutPage(driver);
+		case "Place Order":
+			return PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
 		default:
 			throw new RuntimeException("Invalid page Links at Header are.");
 		}

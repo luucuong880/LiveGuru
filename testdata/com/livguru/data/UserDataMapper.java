@@ -75,6 +75,9 @@ public class UserDataMapper {
 	@JsonProperty("new_phone")
 	private String new_phone;
 
+	@JsonProperty("state")
+	private String state;
+
 	static class Login {
 		@JsonProperty("username")
 		private String username;
@@ -157,6 +160,10 @@ public class UserDataMapper {
 
 	public String getNewPhone() {
 		return new_phone;
+	}
+
+	public String getState() {
+		return state;
 	}
 
 }

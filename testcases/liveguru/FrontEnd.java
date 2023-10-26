@@ -14,6 +14,7 @@ import com.livguru.data.UserDataMapper;
 
 import liveguru.user.BaseTest;
 import liveguru.user.PageGeneratorManager;
+import pageObject.user.CheckoutPageObject;
 import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
 import pageObject.user.LoginPageObject;
@@ -254,7 +255,68 @@ public class FrontEnd extends BaseTest {
 	public void User_10_User_Is_Able_To_Purchase_Product() {
 		log.info("User Step - 42: Open My Wishlist page");
 		yourReviewPage.clickToIconAtWrapper(driver, "Account");
-		myWishlistPage = (MyWishlistPO) yourReviewPage.openPageAtHeaderLinks(driver, "Add to Wishlist");
+		myWishlistPage = (MyWishlistPO) yourReviewPage.openPageAtHeaderLinks(driver, "My Wishlist");
+
+		log.info("User Step - 43: Click to 'Add to Cart' button");
+		myCartPage = (MyCartPageObject) myWishlistPage.clickToButtonByTitleDynamic(driver, "Add to Cart");
+
+		log.info("User Step - 44: Enter Estimate shipping and tax");
+		myCartPage.selectCountryAndState("country", userData.getCountry());
+		myCartPage.getAttributeItemSelected("country", userData.getCountry());
+		myCartPage.selectCountryAndState("region_id", userData.getState());
+		myCartPage.getAttributeItemSelected("region_id", userData.getState());
+		myCartPage.inputToBoxText(driver, "postcode", userData.getZipcode());
+
+		log.info("User Step - 45: Click to 'Estimate' button");
+		myCartPage.clickToButtonTitle(driver, "Estimate");
+
+		log.info("User Step - 46: Verify Shipping cost generated");
+		verifyEquals(myCartPage.getShippingCostText(), "$5.00");
+
+		log.info("User Step - 47: Check to Flat rate radio box");
+		myCartPage.checkToFlatRateBox();
+		verifyTrue(myCartPage.isFlatRateChecked());
+
+		log.info("User Step - 48: Click to 'Update Total' button");
+		myCartPage = myCartPage.clickToButtonTitle("Update Total");
+
+		log.info("User Step - 49: Verify Shipping is added to total");
+		verifyEquals(myCartPage.getTotalCostText(), "$615.00");
+
+		log.info("User Step - 50: Click to 'Proceed to Checkout' button");
+		checkoutPage = (CheckoutPageObject) myCartPage.clickToButtonByTitleDynamic(driver, "Proceed to Checkout");
+
+		log.info("User Step - 51: Enter to 'Billing Information' and click 'Continue' button");
+
+		checkoutPage.inputToBoxText(driver, "billing:firstname", userData.getFirstName());
+		checkoutPage.inputToBoxText(driver, "billing:lastname", userData.getLastName());
+		checkoutPage.inputToBoxText(driver, "billing:street1", userData.getAddress());
+		checkoutPage.inputToBoxText(driver, "billing:city", userData.getCity());
+		checkoutPage.selectStateProvince("billing:region_id", userData.getState());
+		checkoutPage.inputToBoxText(driver, "billing:postcode", userData.getZipcode());
+		checkoutPage.selectStateProvince("billing:country_id", userData.getCountry());
+		checkoutPage.inputToBoxText(driver, "billing:telephone", userData.getPhone());
+
+		checkoutPage.clickToContinueButton("billing-buttons-container");
+
+		log.info("User Step - 52: Click 'Continue' button at Shipping Method");
+		checkoutPage.clickToContinueButton("shipping-method-buttons-container");
+
+		log.info("User Step - 53: Select 'Check/Money Order' radio button and click 'Continue' button");
+		checkoutPage.checkToPaymentRadionBox("Check / Money order");
+		checkoutPage.clickToContinueButton("payment-buttons-container");
+
+		log.info("User Step - 54: Click 'Place Order' button");
+		homePage = (HomePageObject) checkoutPage.clickToButtonByTitleDynamic(driver, "Place Order");
+		homePage.sleepInSecond(3);
+
+		log.info("User Step - 55: Verify Order is gemerated");
+		verifyEquals(homePage.getPageTitleText(), "YOUR ORDER HAS BEEN RECEIVED.");
+	}
+
+	@Test
+	public void User_11_User_Is_Able_To_Purchase_Product() {
+
 	}
 
 	public int generateFakeNumber() {
@@ -283,5 +345,6 @@ public class FrontEnd extends BaseTest {
 	private TVPageObject tvPage;
 	private MyWishlistPO myWishlistPage;
 	private YourReviewPageObject yourReviewPage;
+	private CheckoutPageObject checkoutPage;
 	UserDataMapper userData;
 }

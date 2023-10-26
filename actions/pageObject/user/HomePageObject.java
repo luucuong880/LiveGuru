@@ -15,4 +15,9 @@ public class HomePageObject extends BasePage {
 	public boolean isMessageTextUndisplayed() {
 		return isElementDisplayed(driver, HomePageUI.TEXT_UNDEISPLAYED);
 	}
+
+	public String getPageTitleText() {
+		waitForElementVisible(driver, HomePageUI.PAGE_TITLE);
+		return getElementText(driver, HomePageUI.PAGE_TITLE);
+	}
 }
