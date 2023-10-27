@@ -2,6 +2,7 @@ package liveguru.user;
 
 import org.openqa.selenium.WebDriver;
 
+import pageObject.user.AdvencedSearchPO;
 import pageObject.user.CheckoutPageObject;
 import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
@@ -67,6 +68,10 @@ public class PageGeneratorManager {
 
 	public CheckoutPageObject getCheckoutPage(WebDriver driver) {
 		return new CheckoutPageObject(driver);
+	}
+
+	public AdvencedSearchPO getAdvencedSearchPage(WebDriver driver) {
+		return new AdvencedSearchPO(driver);
 	}
 
 }

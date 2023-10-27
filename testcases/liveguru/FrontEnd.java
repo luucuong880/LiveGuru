@@ -14,6 +14,7 @@ import com.livguru.data.UserDataMapper;
 
 import liveguru.user.BaseTest;
 import liveguru.user.PageGeneratorManager;
+import pageObject.user.AdvencedSearchPO;
 import pageObject.user.CheckoutPageObject;
 import pageObject.user.ComparePageObject;
 import pageObject.user.HomePageObject;
@@ -148,7 +149,7 @@ public class FrontEnd extends BaseTest {
 
 		log.info("User Step - 19: Verify the discount generated");
 		verifyTrue(myCartPage.isTextDisplayed("Discount (GURU50)", "-$5.00"));
-		verifyTrue(myCartPage.isGrandTotalTextDisplayed());
+		verifyEquals(myCartPage.getTotalCostText(), "$100.00");
 	}
 
 	@Test
@@ -255,7 +256,24 @@ public class FrontEnd extends BaseTest {
 	public void User_10_User_Is_Able_To_Purchase_Product() {
 		log.info("User Step - 42: Open My Wishlist page");
 		yourReviewPage.clickToIconAtWrapper(driver, "Account");
-		myWishlistPage = (MyWishlistPO) yourReviewPage.openPageAtHeaderLinks(driver, "My Wishlist");
+		homePage = (HomePageObject) yourReviewPage.openPageAtHeaderLinks(driver, "Log Out");
+
+		homePage.clickToIconAtWrapper(driver, "Account");
+		registerPage = (RegisterPageObject) homePage.openPageAtHeaderLinks(driver, "Register");
+
+		verifyTrue(registerPage.isRequiredFieldDisplayed());
+
+		registerPage.inputToBoxText(driver, "firstname", userData.getFirstName());
+		registerPage.inputToBoxText(driver, "lastname", userData.getLastName());
+		registerPage.inputToBoxText(driver, "email_address", userData.getEmailAddress() + generateFakeNumber() + "@gmail.com");
+		registerPage.inputToBoxText(driver, "password", userData.getPassword());
+		registerPage.inputToBoxText(driver, "confirmation", userData.getPassword());
+
+		homePage = (HomePageObject) registerPage.clickToButtonByTitleDynamic(driver, "Register");
+		verifyEquals(homePage.getTextMessages(driver), "Thank you for registering with Main Website Store.");
+
+		tvPage = (TVPageObject) homePage.openProductsPage(driver, "TV");
+		myWishlistPage = tvPage.clickToAddWishListButton("LG LCD", "link-wishlist");
 
 		log.info("User Step - 43: Click to 'Add to Cart' button");
 		myCartPage = (MyCartPageObject) myWishlistPage.clickToButtonByTitleDynamic(driver, "Add to Cart");
@@ -281,7 +299,7 @@ public class FrontEnd extends BaseTest {
 		myCartPage = myCartPage.clickToButtonTitle("Update Total");
 
 		log.info("User Step - 49: Verify Shipping is added to total");
-		verifyEquals(myCartPage.getTotalCostText(), "$615.00");
+		verifyEquals(myCartPage.getTotalCostText(), "$620.00");
 
 		log.info("User Step - 50: Click to 'Proceed to Checkout' button");
 		checkoutPage = (CheckoutPageObject) myCartPage.clickToButtonByTitleDynamic(driver, "Proceed to Checkout");
@@ -307,16 +325,49 @@ public class FrontEnd extends BaseTest {
 		checkoutPage.clickToContinueButton("payment-buttons-container");
 
 		log.info("User Step - 54: Click 'Place Order' button");
-		homePage = (HomePageObject) checkoutPage.clickToButtonByTitleDynamic(driver, "Place Order");
-		homePage.sleepInSecond(3);
+		checkoutPage.clickToButtonTitle(driver, "Place Order");
 
 		log.info("User Step - 55: Verify Order is gemerated");
-		verifyEquals(homePage.getPageTitleText(), "YOUR ORDER HAS BEEN RECEIVED.");
+		verifyEquals(checkoutPage.getPageTitleText(), "YOUR ORDER HAS BEEN RECEIVED.");
 	}
 
 	@Test
-	public void User_11_User_Is_Able_To_Purchase_Product() {
+	public void User_11_Search_Functionality() {
+		log.info("User Step - 56: Click to 'Magento' logo");
+		homePage = checkoutPage.clickToMagentoLogo(driver);
 
+		log.info("User Step - 57: Open 'Advenced Search' page");
+		advencedSearchPage = homePage.openPageAtBottomLinks(driver, "Advanced Search");
+		verifyEquals(advencedSearchPage.getPageTitleText(), "CATALOG ADVANCED SEARCH");
+
+		log.info("User Step - 58: Enter to price field range and click Search button");
+		advencedSearchPage.inputToBoxText(driver, "price", "0");
+		advencedSearchPage.inputToBoxText(driver, "price_to", "150");
+		advencedSearchPage.clickToSearchButton();
+
+		log.info("User Step - 59: Note the price and name of product in result");
+		verifyEquals(advencedSearchPage.getSearchAmountText(), "2 item(s) were found using the following search criteria");
+		verifyTrue(advencedSearchPage.isProductNameDisplayed("Sony Xperia"));
+		verifyTrue(advencedSearchPage.isProductNameDisplayed("Samsung Galaxy"));
+		verifyEquals(advencedSearchPage.getPriceOfProduct("Sony Xperia", "product-price-1"), "$100.00");
+		verifyEquals(advencedSearchPage.getPriceOfProduct("Samsung Galaxy", "product-price-3"), "$130.00");
+
+		log.info("User Step - 60: Open 'Advenced Search' page");
+		advencedSearchPage = advencedSearchPage.openPageAtBottomLinks(driver, "Advanced Search");
+
+		log.info("User Step - 61: Enter to price field range and click Search button");
+		advencedSearchPage.inputToBoxText(driver, "price", "151");
+		advencedSearchPage.inputToBoxText(driver, "price_to", "1000");
+		advencedSearchPage.clickToSearchButton();
+
+		log.info("User Step - 62: Note the price and name of product in result");
+		verifyEquals(advencedSearchPage.getSearchAmountText(), "3 item(s) were found using the following search criteria");
+		verifyTrue(advencedSearchPage.isProductNameDisplayed("IPhone"));
+		verifyTrue(advencedSearchPage.isProductNameDisplayed("LG LCD"));
+		verifyTrue(advencedSearchPage.isProductNameDisplayed("Samsung LCD"));
+		verifyEquals(advencedSearchPage.getPriceOfProduct("IPhone", "product-price-2"), "$500.00");
+		verifyEquals(advencedSearchPage.getPriceOfProduct("LG LCD", "product-price-4"), "$615.00");
+		verifyEquals(advencedSearchPage.getPriceOfProduct("Samsung LCD", "product-price-5"), "$700.00");
 	}
 
 	public int generateFakeNumber() {
@@ -346,5 +397,6 @@ public class FrontEnd extends BaseTest {
 	private MyWishlistPO myWishlistPage;
 	private YourReviewPageObject yourReviewPage;
 	private CheckoutPageObject checkoutPage;
+	private AdvencedSearchPO advencedSearchPage;
 	UserDataMapper userData;
 }

@@ -21,6 +21,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import pageObject.user.AdvencedSearchPO;
+import pageObject.user.HomePageObject;
 import pageUI.jQuery.uploadFile.BasePageJQueryUI;
 import pageUI.user.BasePageUI;
 
@@ -614,8 +616,8 @@ public class BasePage {
 	}
 
 	public BasePage openProductsPage(WebDriver driver, String productsPage) {
-		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, productsPage);
-		clickToElement(driver, BasePageUI.PRODUCT_PAGE, productsPage);
+		waitForElementClickable(driver, BasePageUI.LINKS_PAGE, productsPage);
+		clickToElement(driver, BasePageUI.LINKS_PAGE, productsPage);
 		switch (productsPage) {
 		case "Mobile":
 			return PageGeneratorManager.getPageGeneratorManager().getMobilePage(driver);
@@ -651,8 +653,8 @@ public class BasePage {
 	}
 
 	public BasePage clickToAddToLinksButton(WebDriver driver, String textValue) {
-		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, textValue);
-		clickToElement(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		waitForElementClickable(driver, BasePageUI.LINKS_PAGE, textValue);
+		clickToElement(driver, BasePageUI.LINKS_PAGE, textValue);
 		switch (textValue) {
 		case "Add to Wishlist":
 			return PageGeneratorManager.getPageGeneratorManager().getMyWishlistPage(driver);
@@ -668,11 +670,12 @@ public class BasePage {
 	public void clickToButtonTitle(WebDriver driver, String title) {
 		waitForElementClickable(driver, BasePageUI.TITLE_DYNAMIC, title);
 		clickToElement(driver, BasePageUI.TITLE_DYNAMIC, title);
+		sleepInSecond(2);
 	}
 
 	public BasePage openProductsPageByText(WebDriver driver, String textValue) {
-		waitForElementClickable(driver, BasePageUI.PRODUCT_PAGE, textValue);
-		clickToElement(driver, BasePageUI.PRODUCT_PAGE, textValue);
+		waitForElementClickable(driver, BasePageUI.LINKS_PAGE, textValue);
+		clickToElement(driver, BasePageUI.LINKS_PAGE, textValue);
 		return PageGeneratorManager.getPageGeneratorManager().getProductsPage(driver);
 	}
 
@@ -684,6 +687,24 @@ public class BasePage {
 	public String getTextMessages(WebDriver driver) {
 		waitForElementVisible(driver, BasePageUI.TEXT_MESSAGE);
 		return getElementText(driver, BasePageUI.TEXT_MESSAGE);
+	}
+
+	public HomePageObject clickToMagentoLogo(WebDriver driver) {
+		waitForElementClickable(driver, BasePageUI.MAGENTO_LOGO);
+		clickToElement(driver, BasePageUI.MAGENTO_LOGO);
+		return PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
+	}
+
+	public AdvencedSearchPO openPageAtBottomLinks(WebDriver driver, String pageBottom) {
+		waitForElementClickable(driver, BasePageUI.LINKS_PAGE, pageBottom);
+		clickToElement(driver, BasePageUI.LINKS_PAGE, pageBottom);
+		switch (pageBottom) {
+		case "Advanced Search":
+			return PageGeneratorManager.getPageGeneratorManager().getAdvencedSearchPage(driver);
+
+		default:
+			throw new RuntimeException("Wrong links page!");
+		}
 	}
 
 	public Object getProductSize(WebDriver driver) {

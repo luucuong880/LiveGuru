@@ -26,4 +26,9 @@ public class CheckoutPageObject extends BasePage {
 		waitForElementClickable(driver, CheckoutPageUI.PAYMENT_RADIO_BOX, titleText);
 		checkToDefaultCheckboxOrRadio(driver, CheckoutPageUI.PAYMENT_RADIO_BOX, titleText);
 	}
+
+	public String getPageTitleText() {
+		waitForElementVisible(driver, CheckoutPageUI.PAGE_TITLE);
+		return getElementText(driver, CheckoutPageUI.PAGE_TITLE);
+	}
 }

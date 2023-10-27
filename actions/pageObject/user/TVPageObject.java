@@ -19,6 +19,11 @@ public class TVPageObject extends BasePage {
 		return PageGeneratorManager.getPageGeneratorManager().getMyWishlistPage(driver);
 	}
 
+	public void clickToAddToCompareButton(String textValue, String classValue) {
+		waitForElementClickable(driver, TVPageUI.ADD_LINKS, textValue, classValue);
+		clickToElement(driver, TVPageUI.ADD_LINKS, textValue, classValue);
+	}
+
 	public ProductsPageObject clickProductsDetail(String text) {
 		waitForElementClickable(driver, TVPageUI.PRODUCTS_DETAIL, text);
 		clickToElement(driver, TVPageUI.PRODUCTS_DETAIL, text);

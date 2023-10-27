@@ -21,4 +21,5 @@ public class MyWishlistPO extends BasePage {
 		waitForElementVisible(driver, MyWishlistPageUI.PRODUCT_TITLE);
 		return isElementDisplayed(driver, MyWishlistPageUI.PRODUCT_TITLE);
 	}
+
 }
