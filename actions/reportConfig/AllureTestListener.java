@@ -8,7 +8,7 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import io.qameta.allure.Attachment;
-import liveguru.user.BaseTest;
+import liveguru.frontend.BaseTest;
 
 public class AllureTestListener implements ITestListener {
 

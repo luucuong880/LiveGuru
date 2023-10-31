@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import liveguru.user.GlobalConstants;
+import liveguru.frontend.GlobalConstants;
 
 public class UserDataMapper {
 

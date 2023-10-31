@@ -14,8 +14,8 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
-import liveguru.user.BaseTest;
-import liveguru.user.GlobalConstants;
+import liveguru.frontend.BaseTest;
+import liveguru.frontend.GlobalConstants;
 
 public class ReportNGListener implements ITestListener {
 

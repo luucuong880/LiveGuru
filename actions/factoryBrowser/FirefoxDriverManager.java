@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-import liveguru.user.GlobalConstants;
+import liveguru.frontend.GlobalConstants;
 
 public class FirefoxDriverManager implements BrowserFactory {
 

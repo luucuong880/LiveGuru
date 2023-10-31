@@ -9,7 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import liveguru.user.GlobalConstants;
+import liveguru.frontend.GlobalConstants;
 
 public class SaucelabFactory {
 	private WebDriver driver;

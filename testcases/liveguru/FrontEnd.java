@@ -12,21 +12,21 @@ import org.testng.annotations.Test;
 
 import com.livguru.data.UserDataMapper;
 
-import liveguru.user.BaseTest;
-import liveguru.user.PageGeneratorManager;
-import pageObject.user.AdvencedSearchPO;
-import pageObject.user.CheckoutPageObject;
-import pageObject.user.ComparePageObject;
-import pageObject.user.HomePageObject;
-import pageObject.user.LoginPageObject;
-import pageObject.user.MobilePageObject;
-import pageObject.user.MyAccountPO;
-import pageObject.user.MyCartPageObject;
-import pageObject.user.MyWishlistPO;
-import pageObject.user.ProductsPageObject;
-import pageObject.user.RegisterPageObject;
-import pageObject.user.TVPageObject;
-import pageObject.user.YourReviewPageObject;
+import liveguru.frontend.BaseTest;
+import liveguru.frontend.PageGeneratorManager;
+import pageObject.frontend.AdvencedSearchPO;
+import pageObject.frontend.CheckoutPageObject;
+import pageObject.frontend.ComparePageObject;
+import pageObject.frontend.HomePageObject;
+import pageObject.frontend.LoginPageObject;
+import pageObject.frontend.MobilePageObject;
+import pageObject.frontend.MyAccountPO;
+import pageObject.frontend.MyCartPageObject;
+import pageObject.frontend.MyWishlistPO;
+import pageObject.frontend.ProductsPageObject;
+import pageObject.frontend.RegisterPageObject;
+import pageObject.frontend.TVPageObject;
+import pageObject.frontend.YourReviewPageObject;
 import utilities.Environment;
 
 public class FrontEnd extends BaseTest {

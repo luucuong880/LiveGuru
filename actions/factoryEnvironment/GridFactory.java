@@ -14,7 +14,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import factoryBrowser.BrowserList;
-import liveguru.user.GlobalConstants;
+import liveguru.frontend.GlobalConstants;
 
 public class GridFactory {
 	private WebDriver driver;
