@@ -21,6 +21,7 @@ import pageObject.frontend.TVPageObject;
 import pageObject.frontend.YourReviewPageObject;
 import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
+import pageObjects.backend.PendingReviewPO;
 import utilities.Environment;
 
 public class BackEnd extends BaseTest {
@@ -64,7 +65,7 @@ public class BackEnd extends BaseTest {
 		yourReviewPage = (YourReviewPageObject) productsPage.clickToAddToLinksButton(driver, "Add Your Review");
 
 		yourReviewPage.checkToRateProducts("Quality 1_4");
-		yourReviewPage.inputToTextArea("review_field", "This product is goood,Can be used for a long time");
+		yourReviewPage.inputToTextArea("review_field", "This product is goood");
 		yourReviewPage.inputToBoxText(driver, "summary_field", "Good");
 		yourReviewPage.inputToBoxText(driver, "nickname_field", "Ghost");
 		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
@@ -76,8 +77,16 @@ public class BackEnd extends BaseTest {
 
 	@Test
 	public void Admin_01_Login_To_Backend_Page() {
+		log.info("Admin Step - 01: Enter Admin Info and login");
 		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userNameLogin, "login", passwordLogin);
 
+		log.info("Admin Step - 02: Open Pending Reviews page");
+		pendingReviewPage = customerBackEndPage.clickPageAtCatlogPages("Catalog", "Reviews and Ratings", "Customer Reviews", "Pending Reviews");
+
+		log.info("Admin Step - 03: Verify User(FrontEnd) is displayed");
+		verifyTrue(pendingReviewPage.isUserFrontEndDisplayed("title", "Good"));
+		verifyTrue(pendingReviewPage.isUserFrontEndDisplayed("nickname", "Ghost"));
+		verifyTrue(pendingReviewPage.isUserFrontEndDisplayed("detail", "This product is goood"));
 	}
 
 	public int generateFakeNumber() {
@@ -102,5 +111,6 @@ public class BackEnd extends BaseTest {
 	private YourReviewPageObject yourReviewPage;
 	public BackEndLoginPO backEndLoginPage;
 	private CustomerBackEndPO customerBackEndPage;
+	private PendingReviewPO pendingReviewPage;
 	UserDataMapper userData;
 }
