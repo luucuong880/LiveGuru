@@ -134,7 +134,7 @@ public class BaseTest {
 			envUrl = "https://account.collegeboard.org/login/signUp";
 			break;
 		case TESTING:
-			envUrl = "http://live.techpanda.org/";
+			envUrl = "http://live.techpanda.org/index.php/backendlogin";
 			break;
 		case STAGING:
 			envUrl = "https://account.collegeboard.org/login/signUp";

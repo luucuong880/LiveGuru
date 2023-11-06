@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suite name="NopCommerce - User">
+<suite name="LiveGuru - User">
 	<listeners>
-		<listener class-name="liveguru.user.MethodListener" />
+		<listener class-name="liveguru.frontend.MethodListener" />
 		<listener class-name="reportConfig.AllureTestListener" />
 <!-- <listener class-name="org.uncommons.reportng.HTMLReporter" />
      <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />

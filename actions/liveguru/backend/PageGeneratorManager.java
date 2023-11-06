@@ -2,7 +2,7 @@ package liveguru.backend;
 
 import org.openqa.selenium.WebDriver;
 
-import pageObject.frontend.HomePageObject;
+import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
 import pageObjects.backend.EditReviewPageObject;
 import pageObjects.backend.PendingReviewPO;
@@ -13,12 +13,12 @@ public class PageGeneratorManager {
 		return new PageGeneratorManager();
 	}
 
-	public CustomerBackEndPO getCustomerBackEndPage(WebDriver driver) {
-		return new CustomerBackEndPO(driver);
+	public BackEndLoginPO getBackEndLoginPage(WebDriver driver) {
+		return new BackEndLoginPO(driver);
 	}
 
-	public HomePageObject getHomePage(WebDriver driver) {
-		return new HomePageObject(driver);
+	public CustomerBackEndPO getCustomerBackEndPage(WebDriver driver) {
+		return new CustomerBackEndPO(driver);
 	}
 
 	public PendingReviewPO getPendingReviewPage(WebDriver driver) {
