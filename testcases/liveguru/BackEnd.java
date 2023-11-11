@@ -14,7 +14,9 @@ import com.livguru.data.UserDataMapper;
 
 import liveguru.frontend.BaseTest;
 import liveguru.frontend.PageGeneratorManager;
+import pageObject.frontend.CheckoutPageObject;
 import pageObject.frontend.HomePageObject;
+import pageObject.frontend.MyCartPageObject;
 import pageObject.frontend.ProductsPageObject;
 import pageObject.frontend.RegisterPageObject;
 import pageObject.frontend.TVPageObject;
@@ -22,6 +24,7 @@ import pageObject.frontend.YourReviewPageObject;
 import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
 import pageObjects.backend.EditReviewPageObject;
+import pageObjects.backend.OrdersPageObject;
 import pageObjects.backend.PendingReviewPO;
 import utilities.Environment;
 
@@ -81,6 +84,43 @@ public class BackEnd extends BaseTest {
 
 		verifyEquals(yourReviewPage.getTextMessages(driver), "Your review has been accepted for moderation.");
 
+		myCartPage = (MyCartPageObject) yourReviewPage.clickToButtonByTitleDynamic(driver, "Add to Cart");
+
+		myCartPage.selectCountryAndState("country", userData.getCountry());
+		myCartPage.getAttributeItemSelected("country", userData.getCountry());
+		myCartPage.selectCountryAndState("region_id", userData.getState());
+		myCartPage.getAttributeItemSelected("region_id", userData.getState());
+		myCartPage.inputToBoxText(driver, "postcode", userData.getZipcode());
+
+		myCartPage.clickToButtonTitle(driver, "Estimate");
+
+		myCartPage.checkToFlatRateBox();
+
+		myCartPage = myCartPage.clickToButtonTitle("Update Total");
+
+		checkoutPage = (CheckoutPageObject) myCartPage.clickToButtonByTitleDynamic(driver, "Proceed to Checkout");
+
+		checkoutPage.inputToBoxText(driver, "billing:firstname", userData.getFirstName());
+		checkoutPage.inputToBoxText(driver, "billing:lastname", userData.getLastName());
+		checkoutPage.inputToBoxText(driver, "billing:street1", userData.getAddress());
+		checkoutPage.inputToBoxText(driver, "billing:city", userData.getCity());
+		checkoutPage.selectStateProvince("billing:region_id", userData.getState());
+		checkoutPage.inputToBoxText(driver, "billing:postcode", userData.getZipcode());
+		checkoutPage.selectStateProvince("billing:country_id", userData.getCountry());
+		checkoutPage.inputToBoxText(driver, "billing:telephone", userData.getPhone());
+
+		checkoutPage.clickToContinueButton("billing-buttons-container");
+
+		checkoutPage.clickToContinueButton("shipping-method-buttons-container");
+
+		checkoutPage.checkToPaymentRadionBox("Check / Money order");
+		checkoutPage.clickToContinueButton("payment-buttons-container");
+
+		checkoutPage.clickToButtonTitle(driver, "Place Order");
+
+		log.info("User Step - 55: Verify Order is gemerated");
+		verifyEquals(checkoutPage.getPageTitleText(), "YOUR ORDER HAS BEEN RECEIVED.");
+
 		backEndLoginPage = yourReviewPage.openBackEndLoginPage(driver);
 
 	}
@@ -91,7 +131,7 @@ public class BackEnd extends BaseTest {
 		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
 
 		log.info("Admin Step - 02: Open Pending Reviews page");
-		pendingReviewPage = customerBackEndPage.clickPageAtCatlogPages("Catalog", "Reviews and Ratings", "Customer Reviews", "Pending Reviews");
+		pendingReviewPage = (PendingReviewPO) customerBackEndPage.clickPageAtCatlogPages(driver, "Catalog", "Reviews and Ratings", "Customer Reviews", "Pending Reviews");
 
 		log.info("Admin Step - 03: Verify User(FrontEnd) is displayed");
 		verifyTrue(pendingReviewPage.isUserFrontEndDisplayed("title", yourThoughts));
@@ -122,8 +162,53 @@ public class BackEnd extends BaseTest {
 	}
 
 	@Test
-	public void Admin_02_Invoice_Can_Be_Printed() {
+	public void Admin_02_Invoice_Can_Be_Printed() throws Exception {
+		log.info("Admin Step - 08: Open 'Orders' page");
+		ordersPage = (OrdersPageObject) pendingReviewPage.openPageAtMenuStart(driver, "Sales", "Orders");
 
+		log.info("Admin Step - 09: Select 'Cancel' field and click 'Search' button");
+		ordersPage.selectSaleOrders("sales_order_grid_massaction-select", "Cancel");
+		ordersPage.clickToButtonTitle(driver, "Search");
+
+		log.info("Admin Step - 10: Check to first checkbox order");
+		ordersPage.checkToOrdersCheckbox(userData.getFirstName() + "  " + userData.getLastName());
+		ordersPage.selectSaleOrders("sales_order_grid_massaction-select", "Print Invoices");
+		ordersPage.clickToButtonTitle(driver, "Submit");
+
+		log.info("Admin Step - 11: Verify Error message text");
+		verifyEquals(ordersPage.getTextMessages(driver), "There are no printable documents related to selected orders.");
+
+		log.info("Admin Step - 12: Select 'Complete' field and click 'Search' button");
+		ordersPage.selectSaleOrders("sales_order_grid_filter_status", "Complete");
+		ordersPage.clickToButtonTitle(driver, "Search");
+
+		log.info("Admin Step - 13: Check to first checkbox order");
+		ordersPage.checkToOrdersCheckbox("abc xyz");
+		ordersPage.selectSaleOrders("sales_order_grid_massaction-select", "Print Invoices");
+		ordersPage.clickToButtonTitle(driver, "Submit");
+
+		log.info("Admin Step - 14: Verify invoice is downloaded");
+		ordersPage.downloadFileAndDeleteFile("invoice2023-11-10_22-36-05", "invoice");
+	}
+
+	@Test
+	public void Admin_03_Invoice_Can_Be_Printed() {
+		log.info("Admin Step - 15: Open Front End page");
+		homePage = ordersPage.openHomePageFrontEnd(driver);
+
+		log.info("Admin Step - 16: Go to link review");
+		yourReviewPage = homePage.openLink();
+
+		log.info("Admin Step - 17: Enter Field at Review page");
+		yourReviewPage.checkToRateProducts("Quality 1_4");
+		yourReviewPage.inputToTextArea("review_field", yourReview);
+		yourReviewPage.inputToBoxText(driver, "summary_field", yourThoughts);
+		yourReviewPage.inputToBoxText(driver, "nickname_field", "Ghost");
+		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
+
+		log.info("Admin Step - 18: Open Admin page and login");
+		backEndLoginPage = yourReviewPage.openBackEndLoginPage(driver);
+		backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
 	}
 
 	public int generateFakeNumber() {
@@ -146,9 +231,12 @@ public class BackEnd extends BaseTest {
 	public ProductsPageObject productsPage;
 	public TVPageObject tvPage;
 	public YourReviewPageObject yourReviewPage;
+	public CheckoutPageObject checkoutPage;
+	public MyCartPageObject myCartPage;
 	public BackEndLoginPO backEndLoginPage;
 	private CustomerBackEndPO customerBackEndPage;
 	private PendingReviewPO pendingReviewPage;
 	private EditReviewPageObject editReviewPage;
+	private OrdersPageObject ordersPage;
 	UserDataMapper userData;
 }

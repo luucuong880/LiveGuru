@@ -23,4 +23,5 @@ public class PendingReviewPO extends BasePage {
 		clickToElement(driver, PendingReviewPageUI.EDIT_BUTTON, text, textContains);
 		return PageGeneratorManager.getPageGeneratorManager().getEditReviewPage(driver);
 	}
+
 }

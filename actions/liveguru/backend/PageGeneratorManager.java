@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
 import pageObjects.backend.EditReviewPageObject;
+import pageObjects.backend.OrdersPageObject;
 import pageObjects.backend.PendingReviewPO;
 
 public class PageGeneratorManager {
@@ -27,6 +28,10 @@ public class PageGeneratorManager {
 
 	public EditReviewPageObject getEditReviewPage(WebDriver driver) {
 		return new EditReviewPageObject(driver);
+	}
+
+	public OrdersPageObject getOrdersPage(WebDriver driver) {
+		return new OrdersPageObject(driver);
 	}
 
 }
