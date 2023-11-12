@@ -31,4 +31,15 @@ public class MobilePageObject extends BasePage {
 		return PageGeneratorManager.getPageGeneratorManager().getComparePage(driver);
 	}
 
+	public void clickToProductImage(String title) {
+		waitForElementClickable(driver, MobilePageUI.IMAGE_PRODUCT, title);
+		clickToElement(driver, MobilePageUI.IMAGE_PRODUCT, title);
+	}
+
+	public YourReviewPageObject clickToReviewsLink() {
+		waitForElementClickable(driver, MobilePageUI.REVIEWS_LINK);
+		clickToElement(driver, MobilePageUI.REVIEWS_LINK);
+		return PageGeneratorManager.getPageGeneratorManager().getYourReviewePage(driver);
+	}
+
 }

@@ -26,4 +26,9 @@ public class YourReviewPageObject extends BasePage {
 		waitForElementVisible(driver, YourReviewPageUI.RATE_RADIO_BOX, idValue);
 		checkToDefaultCheckboxOrRadio(driver, YourReviewPageUI.RATE_RADIO_BOX, idValue);
 	}
+
+	public boolean isCommnetReviewDisplayed(String nameText) {
+		waitForElementVisible(driver, YourReviewPageUI.COMMENT_REVIEW, nameText);
+		return isElementDisplayed(driver, YourReviewPageUI.COMMENT_REVIEW, nameText);
+	}
 }

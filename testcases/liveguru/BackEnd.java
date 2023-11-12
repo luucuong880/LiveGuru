@@ -16,6 +16,7 @@ import liveguru.frontend.BaseTest;
 import liveguru.frontend.PageGeneratorManager;
 import pageObject.frontend.CheckoutPageObject;
 import pageObject.frontend.HomePageObject;
+import pageObject.frontend.MobilePageObject;
 import pageObject.frontend.MyCartPageObject;
 import pageObject.frontend.ProductsPageObject;
 import pageObject.frontend.RegisterPageObject;
@@ -46,6 +47,7 @@ public class BackEnd extends BaseTest {
 		emailAddress = userData.getEmailAddress() + generateFakeNumber() + "@fakemail.com";
 		yourReview = "This product is goood";
 		yourThoughts = "Good";
+		nickName = "Ghost" + generateFakeNumber();
 		yourReview1 = "This product is goood" + generateFakeNumber();
 		yourThoughts1 = "Good" + generateFakeNumber();
 		editReview = "This product is very good" + generateFakeNumber();
@@ -201,14 +203,38 @@ public class BackEnd extends BaseTest {
 
 		log.info("Admin Step - 17: Enter Field at Review page");
 		yourReviewPage.checkToRateProducts("Quality 1_4");
-		yourReviewPage.inputToTextArea("review_field", yourReview);
-		yourReviewPage.inputToBoxText(driver, "summary_field", yourThoughts);
-		yourReviewPage.inputToBoxText(driver, "nickname_field", "Ghost");
+		yourReviewPage.inputToTextArea("review_field", yourReview1);
+		yourReviewPage.inputToBoxText(driver, "summary_field", yourThoughts1);
+		yourReviewPage.inputToBoxText(driver, "nickname_field", nickName);
 		yourReviewPage.clickToButtonTitle(driver, "Submit Review");
 
 		log.info("Admin Step - 18: Open Admin page and login");
 		backEndLoginPage = yourReviewPage.openBackEndLoginPage(driver);
-		backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+
+		log.info("Admin Step - 19: Open Pending review page");
+		pendingReviewPage = (PendingReviewPO) customerBackEndPage.clickPageAtCatlogPages(driver, "Catalog", "Reviews and Ratings", "Customer Reviews", "Pending Reviews");
+
+		log.info("Admin Step - 20: Click to Edit button");
+		editReviewPage = pendingReviewPage.clickToEditButton("Review", yourThoughts);
+
+		log.info("Admin Step - 21: Edit Status review");
+		editReviewPage.selectStatusItem("status_id", "Approved");
+		pendingReviewPage = editReviewPage.clickToButtonByTitleDynamics("Save Review");
+		verifyEquals(pendingReviewPage.getTextMessages(driver), "The review has been saved.");
+
+		log.info("Admin Step - 22: Open Front End page");
+		homePage = pendingReviewPage.openHomePageFrontEnd(driver);
+
+		log.info("Admin Step - 23: Click on Sony Xperia image");
+		mobilePage = (MobilePageObject) homePage.openProductsPage(driver, "Mobile");
+		mobilePage.clickToProductImage("Xperia");
+
+		log.info("Admin Step - 24: Click to Reviews button");
+		yourReviewPage = mobilePage.clickToReviewsLink();
+
+		log.info("Admin Step - 25: Verify Review comment is shown");
+		verifyTrue(yourReviewPage.isCommnetReviewDisplayed(nickName));
 	}
 
 	public int generateFakeNumber() {
@@ -225,7 +251,7 @@ public class BackEnd extends BaseTest {
 	}
 
 	WebDriver driver;
-	String userNameLogin, emailAddress, passwordLogin, yourReview, yourThoughts, editReview, editThoughts, yourReview1, yourThoughts1;
+	String userNameLogin, emailAddress, passwordLogin, yourReview, yourThoughts, editReview, editThoughts, yourReview1, yourThoughts1, nickName;
 	public HomePageObject homePage;
 	public RegisterPageObject registerPage;
 	public ProductsPageObject productsPage;
@@ -238,5 +264,6 @@ public class BackEnd extends BaseTest {
 	private PendingReviewPO pendingReviewPage;
 	private EditReviewPageObject editReviewPage;
 	private OrdersPageObject ordersPage;
+	public MobilePageObject mobilePage;
 	UserDataMapper userData;
 }
