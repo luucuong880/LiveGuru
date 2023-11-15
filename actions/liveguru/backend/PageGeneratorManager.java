@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
 import pageObjects.backend.EditReviewPageObject;
+import pageObjects.backend.InvoicesPageObject;
+import pageObjects.backend.ManageCustomersPO;
 import pageObjects.backend.OrdersPageObject;
 import pageObjects.backend.PendingReviewPO;
 
@@ -32,6 +34,14 @@ public class PageGeneratorManager {
 
 	public OrdersPageObject getOrdersPage(WebDriver driver) {
 		return new OrdersPageObject(driver);
+	}
+
+	public InvoicesPageObject getInvoicesPage(WebDriver driver) {
+		return new InvoicesPageObject(driver);
+	}
+
+	public ManageCustomersPO getManageCustomersPage(WebDriver driver) {
+		return new ManageCustomersPO(driver);
 	}
 
 }

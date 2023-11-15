@@ -18,9 +18,9 @@ public class PendingReviewPO extends BasePage {
 		return isElementDisplayed(driver, PendingReviewPageUI.USER_FRONT_END, nameValue, textValue);
 	}
 
-	public EditReviewPageObject clickToEditButton(String text, String textContains) {
-		waitForElementClickable(driver, PendingReviewPageUI.EDIT_BUTTON, text, textContains);
-		clickToElement(driver, PendingReviewPageUI.EDIT_BUTTON, text, textContains);
+	public EditReviewPageObject clickToEditButton(String position) {
+		waitForElementClickable(driver, PendingReviewPageUI.EDIT_BUTTON, position);
+		clickToElement(driver, PendingReviewPageUI.EDIT_BUTTON, position);
 		return PageGeneratorManager.getPageGeneratorManager().getEditReviewPage(driver);
 	}
 

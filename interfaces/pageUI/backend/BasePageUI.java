@@ -11,5 +11,6 @@ public class BasePageUI {
 	public static final String LINKS_PAGE = "xpath=//a[text()='%s']";
 	public static final String TEXT_MESSAGE = "xpath=//ul[@class='messages']";
 	public static final String MAGENTO_LOGO = "xpath=//a[@class='logo']";
+	public static final String LOGOUT_BUTTON = "xpath=//a[@class='link-logout']";
 
 }

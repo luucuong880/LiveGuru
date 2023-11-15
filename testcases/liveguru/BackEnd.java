@@ -25,6 +25,8 @@ import pageObject.frontend.YourReviewPageObject;
 import pageObjects.backend.BackEndLoginPO;
 import pageObjects.backend.CustomerBackEndPO;
 import pageObjects.backend.EditReviewPageObject;
+import pageObjects.backend.InvoicesPageObject;
+import pageObjects.backend.ManageCustomersPO;
 import pageObjects.backend.OrdersPageObject;
 import pageObjects.backend.PendingReviewPO;
 import utilities.Environment;
@@ -141,7 +143,7 @@ public class BackEnd extends BaseTest {
 		verifyTrue(pendingReviewPage.isUserFrontEndDisplayed("detail", yourReview));
 
 		log.info("Admin Step - 04: Click to Edit button");
-		editReviewPage = pendingReviewPage.clickToEditButton("Review", yourThoughts);
+		editReviewPage = pendingReviewPage.clickToEditButton("1");
 
 		log.info("Admin Step - 05: Edit Review at Edit page");
 		editReviewPage.checkToDetailRating("Quality 1_5");
@@ -156,7 +158,7 @@ public class BackEnd extends BaseTest {
 		pendingReviewPage.clickToButtonTitle(driver, "Reset Filter");
 
 		log.info("Admin Step - 07: Delete Review at Edit page");
-		editReviewPage = pendingReviewPage.clickToEditButton("Review", yourReview);
+		editReviewPage = pendingReviewPage.clickToEditButton("1");
 		editReviewPage.clickToButtonByTitleDynamics("Delete Review");
 		verifyEquals(editReviewPage.getAlertText(driver), "Are you sure you want to do this?");
 		pendingReviewPage = editReviewPage.clickAcceptAlert();
@@ -173,7 +175,7 @@ public class BackEnd extends BaseTest {
 		ordersPage.clickToButtonTitle(driver, "Search");
 
 		log.info("Admin Step - 10: Check to first checkbox order");
-		ordersPage.checkToOrdersCheckbox(userData.getFirstName() + "  " + userData.getLastName());
+		ordersPage.checkToOrdersCheckbox("1");
 		ordersPage.selectSaleOrders("sales_order_grid_massaction-select", "Print Invoices");
 		ordersPage.clickToButtonTitle(driver, "Submit");
 
@@ -185,7 +187,7 @@ public class BackEnd extends BaseTest {
 		ordersPage.clickToButtonTitle(driver, "Search");
 
 		log.info("Admin Step - 13: Check to first checkbox order");
-		ordersPage.checkToOrdersCheckbox("abc xyz");
+		ordersPage.checkToOrdersCheckbox("1");
 		ordersPage.selectSaleOrders("sales_order_grid_massaction-select", "Print Invoices");
 		ordersPage.clickToButtonTitle(driver, "Submit");
 
@@ -194,7 +196,7 @@ public class BackEnd extends BaseTest {
 	}
 
 	@Test
-	public void Admin_03_Invoice_Can_Be_Printed() {
+	public void Admin_03_Product_Review_Mechanism() {
 		log.info("Admin Step - 15: Open Front End page");
 		homePage = ordersPage.openHomePageFrontEnd(driver);
 
@@ -210,13 +212,13 @@ public class BackEnd extends BaseTest {
 
 		log.info("Admin Step - 18: Open Admin page and login");
 		backEndLoginPage = yourReviewPage.openBackEndLoginPage(driver);
-		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+		customerBackEndPage = liveguru.backend.PageGeneratorManager.getPageGeneratorManager().getCustomerBackEndPage(driver);
 
 		log.info("Admin Step - 19: Open Pending review page");
 		pendingReviewPage = (PendingReviewPO) customerBackEndPage.clickPageAtCatlogPages(driver, "Catalog", "Reviews and Ratings", "Customer Reviews", "Pending Reviews");
 
 		log.info("Admin Step - 20: Click to Edit button");
-		editReviewPage = pendingReviewPage.clickToEditButton("Review", yourThoughts);
+		editReviewPage = pendingReviewPage.clickToEditButton("1");
 
 		log.info("Admin Step - 21: Edit Status review");
 		editReviewPage.selectStatusItem("status_id", "Approved");
@@ -235,6 +237,99 @@ public class BackEnd extends BaseTest {
 
 		log.info("Admin Step - 25: Verify Review comment is shown");
 		verifyTrue(yourReviewPage.isCommnetReviewDisplayed(nickName));
+	}
+
+	@Test
+	public void Admin_04_Verify_Sort_Is_Working() {
+		log.info("Admin Step - 26: Go to Admin page");
+		backEndLoginPage = yourReviewPage.openBackEndLoginPage(driver);
+		customerBackEndPage = liveguru.backend.PageGeneratorManager.getPageGeneratorManager().getCustomerBackEndPage(driver);
+
+		log.info("Admin Step - 27: Open Invoices page");
+		invoicesPage = (InvoicesPageObject) customerBackEndPage.openPageAtMenuStart(driver, "Sales", "Invoices");
+
+		log.info("Admin Step - 28: Click Sort Title button and verify sort Ascending is working");
+		invoicesPage.clickToSortButtonByDynamics("Invoice #");
+		verifyTrue(invoicesPage.isSortByAscending("2"));
+
+		invoicesPage.clickToSortButtonByDynamics("Invoice Date");
+		verifyTrue(invoicesPage.isSortByAscending("3"));
+
+		invoicesPage.clickToSortButtonByDynamics("Order #");
+		verifyTrue(invoicesPage.isSortByAscending("4"));
+
+		invoicesPage.clickToSortButtonByDynamics("Order Date");
+		verifyTrue(invoicesPage.isSortByAscending("5"));
+
+		invoicesPage.clickToSortButtonByDynamics("Bill to Name");
+		verifyTrue(invoicesPage.isSortByAscending("6"));
+
+		invoicesPage.clickToSortButtonByDynamics("Status");
+		verifyTrue(invoicesPage.isSortByAscending("7"));
+
+		invoicesPage.clickToSortButtonByDynamics("Amount");
+		verifyTrue(invoicesPage.isSortByAscending("8"));
+
+		log.info("Admin Step - 29: Click Sort Title button and verify sort Descending is working");
+		invoicesPage.clickToSortButtonByDynamics("Invoice #");
+		verifyTrue(invoicesPage.isSortByDescending("2"));
+
+		invoicesPage.clickToSortButtonByDynamics("Invoice Date");
+		verifyTrue(invoicesPage.isSortByDescending("3"));
+
+		invoicesPage.clickToSortButtonByDynamics("Order #");
+		verifyTrue(invoicesPage.isSortByDescending("4"));
+
+		invoicesPage.clickToSortButtonByDynamics("Order Date");
+		verifyTrue(invoicesPage.isSortByDescending("5"));
+
+		invoicesPage.clickToSortButtonByDynamics("Bill to Name");
+		verifyTrue(invoicesPage.isSortByDescending("6"));
+
+		invoicesPage.clickToSortButtonByDynamics("Status");
+		verifyTrue(invoicesPage.isSortByDescending("7"));
+
+		invoicesPage.clickToSortButtonByDynamics("Amount");
+		verifyTrue(invoicesPage.isSortByDescending("8"));
+	}
+
+	@Test
+	public void Admin_05_Verify_Pagination_Functionality() {
+		log.info("Admin Step - 30: Click Log out button and login");
+		backEndLoginPage = invoicesPage.clickToLogoutLinkButton(driver);
+		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+
+		log.info("Admin Step - 31: Open Orders page");
+		ordersPage = (OrdersPageObject) customerBackEndPage.openPageAtMenuStart(driver, "Sales", "Orders");
+
+		log.info("Admin Step - 32: Select view per page");
+		ordersPage.selectViewPerPage("20");
+		verifyEquals(ordersPage.getViewPerPageSize(), 20);
+
+		ordersPage.selectViewPerPage("30");
+		verifyEquals(ordersPage.getViewPerPageSize(), 30);
+
+		ordersPage.selectViewPerPage("50");
+		verifyEquals(ordersPage.getViewPerPageSize(), 50);
+
+		ordersPage.selectViewPerPage("100");
+		verifyEquals(ordersPage.getViewPerPageSize(), 100);
+
+		ordersPage.selectViewPerPage("200");
+		verifyEquals(ordersPage.getViewPerPageSize(), 200);
+	}
+
+	@Test
+	public void Admin_06_Verify_Search_Functionality() {
+		log.info("Admin Step - 33: Click Log out button and login");
+		backEndLoginPage = invoicesPage.clickToLogoutLinkButton(driver);
+		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+
+		log.info("Admin Step - 34: Open Manage Customer Page");
+		manageCustomersPage = (ManageCustomersPO) customerBackEndPage.openPageAtMenuStart(driver, "Customers", "Manage Customers");
+
+		log.info("Admin Step - 35: Search data with each criteria");
+
 	}
 
 	public int generateFakeNumber() {
@@ -265,5 +360,7 @@ public class BackEnd extends BaseTest {
 	private EditReviewPageObject editReviewPage;
 	private OrdersPageObject ordersPage;
 	public MobilePageObject mobilePage;
+	public InvoicesPageObject invoicesPage;
+	public ManageCustomersPO manageCustomersPage;
 	UserDataMapper userData;
 }

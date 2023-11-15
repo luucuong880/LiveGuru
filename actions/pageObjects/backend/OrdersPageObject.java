@@ -28,4 +28,15 @@ public class OrdersPageObject extends BasePage {
 		deleteContainName(fileName);
 	}
 
+	public void selectViewPerPage(String textItem) {
+		waitForElementClickable(driver, OrdersPageUI.VIEW_PER_PAGE);
+		selectItemInDefaultDropdown(driver, OrdersPageUI.VIEW_PER_PAGE, textItem);
+		waitForElementInVisible(driver, OrdersPageUI.LOADING_MASK_ORDER);
+	}
+
+	public Object getViewPerPageSize() {
+		waitForElementVisible(driver, OrdersPageUI.VIEW_PER_PAGE_SIZE);
+		return getElementSize(driver, OrdersPageUI.VIEW_PER_PAGE_SIZE);
+	}
+
 }

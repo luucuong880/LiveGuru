@@ -21,9 +21,9 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import pageObject.frontend.HomePageObject;
+import pageObjects.backend.BackEndLoginPO;
 import pageUI.backend.BasePageUI;
 import pageUI.jQuery.uploadFile.BasePageJQueryUI;
 
@@ -161,6 +161,10 @@ public class BasePage extends FileDownload {
 
 	public List<WebElement> getListWebElement(WebDriver driver, String locatorType) {
 		return driver.findElements(getByLocator(locatorType));
+	}
+
+	public List<WebElement> getListWebElement(WebDriver driver, String locatorType, String... dynamicValues) {
+		return driver.findElements(getByLocator(getDynamicXpath(locatorType, dynamicValues)));
 	}
 
 	public void clickToElement(WebDriver driver, String locatorType) {
@@ -612,6 +616,10 @@ public class BasePage extends FileDownload {
 		switch (menuPages) {
 		case "Orders":
 			return PageGeneratorManager.getPageGeneratorManager().getOrdersPage(driver);
+		case "Invoices":
+			return PageGeneratorManager.getPageGeneratorManager().getInvoicesPage(driver);
+		case "Manage Customers":
+			return PageGeneratorManager.getPageGeneratorManager().getManageCustomersPage(driver);
 		default:
 			throw new RuntimeException("Invalid page Links at Header are.");
 		}
@@ -636,6 +644,12 @@ public class BasePage extends FileDownload {
 	public String getTextMessages(WebDriver driver) {
 		waitForElementVisible(driver, BasePageUI.TEXT_MESSAGE);
 		return getElementText(driver, BasePageUI.TEXT_MESSAGE);
+	}
+
+	public BackEndLoginPO clickToLogoutLinkButton(WebDriver driver) {
+		waitForElementClickable(driver, BasePageUI.LOGOUT_BUTTON);
+		clickToElement(driver, BasePageUI.LOGOUT_BUTTON);
+		return PageGeneratorManager.getPageGeneratorManager().getBackEndLoginPage(driver);
 	}
 
 	public HomePageObject openHomePageFrontEnd(WebDriver driver) {
@@ -730,57 +744,6 @@ public class BasePage extends FileDownload {
 		Collections.reverse(productSortList);
 
 		return productSortList.equals(productUIList);
-	}
-
-	public void test01_DownloadAndDeleteFileFullName() throws Exception {
-		String file = "smilechart.xls";
-		driver.get("http://spreadsheetpage.com/index.php/file/C35/P10/");
-		driver.manage().window().maximize();
-		Duration.ofSeconds(15);
-		// Xóa toàn bộ file trong thư mục
-		deleteAllFileInFolder();
-		// Click vào title chứa file tải về
-		driver.findElement(By.xpath("//a[contains(text(),'smilechart.xls')]")).click();
-		Duration.ofSeconds(15);
-		// Verify có 1 file được tải về
-		waitForDownloadFileFullnameCompleted(file);
-		// Đếm số lượng file trong thư mục sau khi tải về
-		int countFileBeforeDelete = countFilesInDirectory();
-		System.out.println("SAU KHI TAI VE: " + countFileBeforeDelete);
-		// Verify số lượng file tải về bằng 1
-		Assert.assertEquals(countFileBeforeDelete, 1);
-		// Xóa file đã tải về
-		deleteFileFullName(file);
-		// Đếm số lượng file trong thư mục sau khi xóa
-		int countFileAfterDelete = countFilesInDirectory();
-		System.out.println("SAU KHI XOA: " + countFileAfterDelete);
-		// Verify số lượng file tải về bằng 0
-		Assert.assertEquals(countFileAfterDelete, 0);
-	}
-
-	public void test02_DownloadAndDeleteFileContainName() throws Exception {
-		String file = ".xls";
-		driver.get("http://spreadsheetpage.com/index.php/file/C35/P10/");
-		Duration.ofSeconds(15);
-		driver.manage().window().maximize();
-		// Xóa toàn bộ file trong thư mục
-		deleteAllFileInFolder();
-		// Click vào title chứa file tải về
-		driver.findElement(By.xpath("//a[contains(.,'lister.xls')]")).click();
-		Duration.ofSeconds(15);
-		// Verify có 1 file được tải về chứa đuôi file mở rộng là .xls
-		waitForDownloadFileContainsNameCompleted(file);
-		// Đếm số lượng file trong thư mục sau khi tải về
-		int countFileBeforeDelete = countFilesInDirectory();
-		System.out.println("SAU KHI TAI VE: " + countFileBeforeDelete);
-		// Verify số lượng file tải về bằng 1
-		Assert.assertEquals(countFileBeforeDelete, 1);
-		deleteFileContainName(file);
-		// Đếm số lượng file trong thư mục sau khi xóa
-		int countFileAfterDelete = countFilesInDirectory();
-		System.out.println("SAU KHI XOA: " + countFileAfterDelete);
-		// Verify số lượng file tải về bằng 0
-		Assert.assertEquals(countFileAfterDelete, 0);
 	}
 
 	public void deleteAllFileInFolder() {
