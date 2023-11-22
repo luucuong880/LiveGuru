@@ -633,7 +633,7 @@ public class BasePage extends FileDownload {
 	public void clickToButtonTitle(WebDriver driver, String title) {
 		waitForElementClickable(driver, BasePageUI.TITLE_DYNAMIC, title);
 		clickToElement(driver, BasePageUI.TITLE_DYNAMIC, title);
-		sleepInSecond(2);
+		sleepInSecond(1);
 	}
 
 	public boolean isTextHeaderDasboardDisplayed(WebDriver driver, String valueClass) {
@@ -644,6 +644,11 @@ public class BasePage extends FileDownload {
 	public String getTextMessages(WebDriver driver) {
 		waitForElementVisible(driver, BasePageUI.TEXT_MESSAGE);
 		return getElementText(driver, BasePageUI.TEXT_MESSAGE);
+	}
+
+	public String getEmptyText(WebDriver driver) {
+		waitForElementVisible(driver, BasePageUI.EMPTY_TEXT);
+		return getElementText(driver, BasePageUI.EMPTY_TEXT);
 	}
 
 	public BackEndLoginPO clickToLogoutLinkButton(WebDriver driver) {
@@ -657,15 +662,20 @@ public class BasePage extends FileDownload {
 		return liveguru.frontend.PageGeneratorManager.getPageGeneratorManager().getHomePage(driver);
 	}
 
-	public Object getProductSize(WebDriver driver) {
-		waitForElementVisible(driver, BasePageUI.PRODUCT_SIZE);
-		return getElementSize(driver, BasePageUI.PRODUCT_SIZE);
+	public Object getInformationSize(WebDriver driver, String text, String sortPosition) {
+		waitForElementVisible(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
+		return getElementSize(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 	}
 
-	public boolean isProductNameSortByAscending(WebDriver driver) {
+	public void clickToLinksButton(WebDriver driver, String text) {
+		waitForElementClickable(driver, BasePageUI.LINKS_BUTTON, text);
+		clickToElement(driver, BasePageUI.LINKS_BUTTON, text);
+	}
+
+	public boolean isSortByAscending(WebDriver driver, String text, String sortPosition) {
 		ArrayList<String> productUIList = new ArrayList<String>();
 
-		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.PRODUCT_SIZE);
+		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 
 		for (WebElement productName : productNameText) {
 			productUIList.add(productName.getText());
@@ -682,10 +692,10 @@ public class BasePage extends FileDownload {
 		return productSortList.equals(productUIList);
 	}
 
-	public boolean isProductNameSortByDescending(WebDriver driver) {
+	public boolean isSortByDescending(WebDriver driver, String text, String sortPosition) {
 		ArrayList<String> productUIList = new ArrayList<String>();
 
-		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.PRODUCT_SIZE);
+		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 
 		for (WebElement productName : productNameText) {
 			productUIList.add(productName.getText());
@@ -704,10 +714,10 @@ public class BasePage extends FileDownload {
 		return productSortList.equals(productUIList);
 	}
 
-	public boolean isProductPriceSortByAscending(WebDriver driver) {
+	public boolean isSortPriceByAscending(WebDriver driver, String text, String sortPosition) {
 		ArrayList<Float> productUIList = new ArrayList<Float>();
 
-		List<WebElement> productPriceText = getListWebElement(driver, BasePageUI.PRODUCT_PRICE);
+		List<WebElement> productPriceText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 
 		for (WebElement productPrice : productPriceText) {
 			productUIList.add(Float.parseFloat(productPrice.getText().replace("$", "")));
@@ -724,10 +734,10 @@ public class BasePage extends FileDownload {
 		return productSortList.equals(productUIList);
 	}
 
-	public boolean isProductPriceSortByDescending(WebDriver driver) {
+	public boolean isSortPriceByDescending(WebDriver driver, String text, String sortPosition) {
 		ArrayList<Float> productUIList = new ArrayList<Float>();
 
-		List<WebElement> productPriceText = getListWebElement(driver, BasePageUI.PRODUCT_PRICE);
+		List<WebElement> productPriceText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 
 		for (WebElement productPrice : productPriceText) {
 			productUIList.add(Float.parseFloat(productPrice.getText().replace("$", "")));

@@ -1,6 +1,9 @@
 package pageObjects.backend;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import liveguru.backend.BasePage;
 import pageUI.backend.OrdersPageUI;
@@ -37,6 +40,16 @@ public class OrdersPageObject extends BasePage {
 	public Object getViewPerPageSize() {
 		waitForElementVisible(driver, OrdersPageUI.VIEW_PER_PAGE_SIZE);
 		return getElementSize(driver, OrdersPageUI.VIEW_PER_PAGE_SIZE);
+	}
+
+	public boolean isOrdersChecked(String text) {
+
+		List<WebElement> elements = getListWebElement(driver, OrdersPageUI.ORDERS_CHECKED, text);
+		for (WebElement element : elements) {
+			element.getSize();
+			System.out.println(element);
+		}
+		return isElementSelected(driver, OrdersPageUI.ORDERS_CHECKED, text);
 	}
 
 }

@@ -250,47 +250,47 @@ public class BackEnd extends BaseTest {
 
 		log.info("Admin Step - 28: Click Sort Title button and verify sort Ascending is working");
 		invoicesPage.clickToSortButtonByDynamics("Invoice #");
-		verifyTrue(invoicesPage.isSortByAscending("2"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Invoice #", "2"));
 
 		invoicesPage.clickToSortButtonByDynamics("Invoice Date");
-		verifyTrue(invoicesPage.isSortByAscending("3"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Invoice Date", "3"));
 
 		invoicesPage.clickToSortButtonByDynamics("Order #");
-		verifyTrue(invoicesPage.isSortByAscending("4"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Order #", "4"));
 
 		invoicesPage.clickToSortButtonByDynamics("Order Date");
-		verifyTrue(invoicesPage.isSortByAscending("5"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Order Date", "5"));
 
 		invoicesPage.clickToSortButtonByDynamics("Bill to Name");
-		verifyTrue(invoicesPage.isSortByAscending("6"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Bill to Name", "6"));
 
 		invoicesPage.clickToSortButtonByDynamics("Status");
-		verifyTrue(invoicesPage.isSortByAscending("7"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Status", "7"));
 
 		invoicesPage.clickToSortButtonByDynamics("Amount");
-		verifyTrue(invoicesPage.isSortByAscending("8"));
+		verifyTrue(invoicesPage.isSortByAscending(driver, "Amount", "8"));
 
 		log.info("Admin Step - 29: Click Sort Title button and verify sort Descending is working");
 		invoicesPage.clickToSortButtonByDynamics("Invoice #");
-		verifyTrue(invoicesPage.isSortByDescending("2"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Invoice #", "2"));
 
 		invoicesPage.clickToSortButtonByDynamics("Invoice Date");
-		verifyTrue(invoicesPage.isSortByDescending("3"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Invoice Date", "3"));
 
 		invoicesPage.clickToSortButtonByDynamics("Order #");
-		verifyTrue(invoicesPage.isSortByDescending("4"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Order #", "4"));
 
 		invoicesPage.clickToSortButtonByDynamics("Order Date");
-		verifyTrue(invoicesPage.isSortByDescending("5"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Order Date", "5"));
 
 		invoicesPage.clickToSortButtonByDynamics("Bill to Name");
-		verifyTrue(invoicesPage.isSortByDescending("6"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Bill to Name", "6"));
 
 		invoicesPage.clickToSortButtonByDynamics("Status");
-		verifyTrue(invoicesPage.isSortByDescending("7"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Status", "7"));
 
 		invoicesPage.clickToSortButtonByDynamics("Amount");
-		verifyTrue(invoicesPage.isSortByDescending("8"));
+		verifyTrue(invoicesPage.isSortByDescending(driver, "Amount", "8"));
 	}
 
 	@Test
@@ -328,8 +328,65 @@ public class BackEnd extends BaseTest {
 		log.info("Admin Step - 34: Open Manage Customer Page");
 		manageCustomersPage = (ManageCustomersPO) customerBackEndPage.openPageAtMenuStart(driver, "Customers", "Manage Customers");
 
-		log.info("Admin Step - 35: Search data with each criteria");
+		log.info("Admin Step - 35: Search data with ID criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_entity_id_to", "31389");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "ID", "2"), 3);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
 
+		log.info("Admin Step - 36: Search data with Name criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_name", "Automation FC");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Name", "3"), 20);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
+
+		log.info("Admin Step - 37: Search data with Email criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_email", "automationfc.vn@gmail.com");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Email", "4"), 1);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
+
+		log.info("Admin Step - 38: Search data with Telephone criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_Telephone", "0123456789");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Telephone", "5"), 20);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
+
+		log.info("Admin Step - 39: Search data with Zip criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_billing_postcode", "550000");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "ZIP", "6"), 1);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
+
+		log.info("Admin Step - 40: Search data with Country criteria");
+		manageCustomersPage.selectCountryID("customerGrid_filter_billing_country_id", "Vietnam");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Country", "7"), 20);
+		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
+
+		log.info("Admin Step - 41: Search data with State/Province criteria");
+		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_billing_region", "Cam Le");
+		manageCustomersPage.clickToButtonTitle(driver, "Search");
+		verifyEquals(manageCustomersPage.getEmptyText(driver), "No records found.");
+
+	}
+
+	@Test
+	public void Admin_07_Verify_Select_Checkbox_Functionality() {
+		log.info("Admin Step - 42: Click Log out button and login");
+		backEndLoginPage = manageCustomersPage.clickToLogoutLinkButton(driver);
+		customerBackEndPage = backEndLoginPage.loginWithBackEndInfo("username", userData.getLoginUsername(), "login", userData.getLoginPassword());
+
+		log.info("Admin Step - 43: Open Orders page");
+		ordersPage = (OrdersPageObject) customerBackEndPage.openPageAtMenuStart(driver, "Sales", "Orders");
+		ordersPage.selectViewPerPage("30");
+		verifyEquals(ordersPage.getViewPerPageSize(), 30);
+
+		log.info("Admin Step - 44: Click 'Select Visible' link");
+		ordersPage.clickToLinksButton(driver, "Select Visible");
+
+		log.info("Admin Step - 45: Verify 30 item is selected and get text");
+		verifyTrue(ordersPage.isOrdersChecked("Order #"));
 	}
 
 	public int generateFakeNumber() {
