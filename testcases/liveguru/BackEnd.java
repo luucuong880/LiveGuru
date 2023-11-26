@@ -387,6 +387,13 @@ public class BackEnd extends BaseTest {
 
 		log.info("Admin Step - 45: Verify 30 item is selected and get text");
 		verifyTrue(ordersPage.isOrdersChecked("Order #"));
+		verifyEquals(ordersPage.getMessageDisplayed("6"), "30 items selected");
+
+		log.info("Admin Step - 46: Click 'Unselect Visible' link");
+		ordersPage.clickToLinksButton(driver, "Unselect Visible");
+		log.info("Admin Step - 47: Verify 0 item is selected and get text");
+		verifyFalse(ordersPage.isOrdersChecked("Order #"));
+		verifyEquals(ordersPage.getMessageDisplayed("6"), "0 items selected");
 	}
 
 	public int generateFakeNumber() {
