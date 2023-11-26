@@ -47,9 +47,13 @@ public class OrdersPageObject extends BasePage {
 		List<WebElement> elements = getListWebElement(driver, OrdersPageUI.ORDERS_CHECKED, text);
 		for (WebElement element : elements) {
 			element.getSize();
-			System.out.println(element);
 		}
 		return isElementSelected(driver, OrdersPageUI.ORDERS_CHECKED, text);
+	}
+
+	public Object getMessageDisplayed(String position) {
+		waitForElementVisible(driver, OrdersPageUI.MESSAGE_TEXT, position);
+		return getElementText(driver, OrdersPageUI.MESSAGE_TEXT, position);
 	}
 
 }
