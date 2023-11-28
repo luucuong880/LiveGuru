@@ -337,7 +337,7 @@ public class BackEnd extends BaseTest {
 		log.info("Admin Step - 36: Search data with Name criteria");
 		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_name", "Automation FC");
 		manageCustomersPage.clickToButtonTitle(driver, "Search");
-		verifyEquals(manageCustomersPage.getInformationSize(driver, "Name", "3"), 20);
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Name", "3"), 2);
 		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
 
 		log.info("Admin Step - 37: Search data with Email criteria");

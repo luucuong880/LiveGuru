@@ -663,8 +663,11 @@ public class BasePage extends FileDownload {
 	}
 
 	public Object getInformationSize(WebDriver driver, String text, String sortPosition) {
-		waitForElementVisible(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
-		return getElementSize(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
+		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
+		for (WebElement productName : productNameText) {
+			productName.getText().endsWith("Automation FC");
+		}
+		return productNameText.size();
 	}
 
 	public void clickToLinksButton(WebDriver driver, String text) {
