@@ -665,14 +665,23 @@ public class BasePage extends FileDownload {
 	public Object getInformationSize(WebDriver driver, String text, String sortPosition) {
 		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
 		for (WebElement productName : productNameText) {
-			productName.getText().endsWith("Automation FC");
+			if (productName.getText().endsWith("Automation FC")) {
+				productName.getSize();
+			} else if (productName.getText().endsWith("0123456789")) {
+				productName.getSize();
+			} else if (productName.getText().endsWith("Viet Nam")) {
+				productName.getSize();
+			}
+
 		}
 		return productNameText.size();
+
 	}
 
 	public void clickToLinksButton(WebDriver driver, String text) {
 		waitForElementClickable(driver, BasePageUI.LINKS_BUTTON, text);
 		clickToElement(driver, BasePageUI.LINKS_BUTTON, text);
+		waitForElementInVisible(driver, BasePageUI.LOADING_MASK_ORDER);
 	}
 
 	public boolean isSortByAscending(WebDriver driver, String text, String sortPosition) {

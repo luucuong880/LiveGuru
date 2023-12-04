@@ -43,12 +43,18 @@ public class OrdersPageObject extends BasePage {
 	}
 
 	public boolean isOrdersChecked(String text) {
-
 		List<WebElement> elements = getListWebElement(driver, OrdersPageUI.ORDERS_CHECKED, text);
+		boolean status = false;
 		for (WebElement element : elements) {
-			element.getSize();
+			if (element.isSelected()) {
+				status = true;
+			} else {
+				status = false;
+				break;
+			}
+
 		}
-		return isElementSelected(driver, OrdersPageUI.ORDERS_CHECKED, text);
+		return status;
 	}
 
 	public Object getMessageDisplayed(String position) {

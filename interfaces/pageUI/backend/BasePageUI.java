@@ -12,5 +12,5 @@ public class BasePageUI {
 	public static final String MAGENTO_LOGO = "xpath=//a[@class='logo']";
 	public static final String LOGOUT_BUTTON = "xpath=//a[@class='link-logout']";
 	public static final String EMPTY_TEXT = "xpath=//td[@class='empty-text a-center']";
-
+	public static final String LOADING_MASK_ORDER = "xpath=//div[@id='loading-mask']";
 }
