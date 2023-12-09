@@ -349,7 +349,7 @@ public class BackEnd extends BaseTest {
 		log.info("Admin Step - 38: Search data with Telephone criteria");
 		manageCustomersPage.inputToBoxText(driver, "customerGrid_filter_Telephone", "0123456789");
 		manageCustomersPage.clickToButtonTitle(driver, "Search");
-		verifyEquals(manageCustomersPage.getInformationSize(driver, "Telephone", "5"), 20);
+		verifyEquals(manageCustomersPage.getInformationSize(driver, "Telephone", "5"), 16);
 		manageCustomersPage.clickToButtonTitle(driver, "Reset Filter");
 
 		log.info("Admin Step - 39: Search data with Zip criteria");

@@ -10,6 +10,7 @@ import java.util.Set;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
@@ -663,18 +664,16 @@ public class BasePage extends FileDownload {
 	}
 
 	public Object getInformationSize(WebDriver driver, String text, String sortPosition) {
+
 		List<WebElement> productNameText = getListWebElement(driver, BasePageUI.SORT_WITH_CRITERIA, text, sortPosition);
+		Dimension status = null;
 		for (WebElement productName : productNameText) {
-			if (productName.getText().endsWith("Automation FC")) {
-				productName.getSize();
-			} else if (productName.getText().endsWith("0123456789")) {
-				productName.getSize();
-			} else if (productName.getText().endsWith("Viet Nam")) {
-				productName.getSize();
+			if (productName.getText() == "Automation FC" || productName.getText() == "0123456789" || productName.getText() == "Viet Nam") {
+				status = productName.getSize();
 			}
 
 		}
-		return productNameText.size();
+		return status;
 
 	}
 
