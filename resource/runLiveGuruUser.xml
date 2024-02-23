@@ -13,8 +13,8 @@
 	<parameter name="serverName" value="testing" />
 	
 
-	<test name="Run on Chrome" perserve-order="false">
-		<parameter name="browser" value="chrome" />
+	<test name="Run on Safari" perserve-order="false">
+		<parameter name="browser" value="safari" />
 		<classes>
 			<class name="liveguru.FrontEnd" />
 		</classes>

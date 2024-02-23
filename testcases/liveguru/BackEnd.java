@@ -37,8 +37,8 @@ public class BackEnd extends BaseTest {
 
 	@Parameters({ "envName", "serverName", "browser", "ipAddress", "portNumber", "osName", "osVersion" })
 	@BeforeClass
-	public void beforeClass(@Optional("local") String envName, @Optional("testing") String serverName, @Optional("chrome") String browserName, @Optional("Windows") String osName, @Optional("10") String osVersion,
-			@Optional("localhost") String ipAddress, @Optional("4444") String portNumber) {
+	public void beforeClass(@Optional("local") String envName, @Optional("testing") String serverName, @Optional("safari") String browserName, @Optional("Mac") String osName, @Optional("10") String osVersion, @Optional("localhost") String ipAddress,
+			@Optional("4444") String portNumber) {
 		ConfigFactory.setProperty("env", envName);
 		environment = ConfigFactory.create(Environment.class);
 
